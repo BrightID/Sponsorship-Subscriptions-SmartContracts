@@ -1,2 +1,2 @@
 # BrightID-BST-SmartContracts
-BST and BSST token smart contracts
+BST and BSST smart contracts
