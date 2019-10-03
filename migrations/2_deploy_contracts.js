@@ -1,5 +1,3 @@
-var FakeDai = artifacts.require('FakeDai.sol');
-
 var BSToken = artifacts.require('BSToken.sol');
 var BSMinter = artifacts.require('BSMinter.sol');
 
