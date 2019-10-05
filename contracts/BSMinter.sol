@@ -69,8 +69,8 @@ contract BSMinter is Ownable {
     function setPrice(uint256 _price)
         external
         onlyOwner
+        onlyPositive(_price)
     {
-        require(0 < _price, INVALID_AMOUNT);
         price = _price;
         emit PriceSet(price);
     }
@@ -92,5 +92,14 @@ contract BSMinter is Ownable {
             emit TokensPurchased(msg.sender, bsAmount);
             require(bsToken.mint(msg.sender, bsAmount), MINT_ERROR);
         }
+    }
+
+    /**
+     * @dev Throws if the number is not bigger than zero.
+     * @param number The number to validate.
+     */
+    modifier onlyPositive(uint number) {
+        require(0 < number, INVALID_AMOUNT);
+        _;
     }
 }
