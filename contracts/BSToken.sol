@@ -10,6 +10,7 @@ import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 contract BSToken is ERC20Mintable {
     string private constant TRANSFER_ERROR = "BST is not transferable.";
     string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
+    string private constant INVALID_AMOUNT = "Amount must be greater than zero";
 
     string public constant name = "BrightID Sponsorship Token";
     string public constant symbol = "BST";
@@ -32,10 +33,11 @@ contract BSToken is ERC20Mintable {
     function mint(address account, uint256 amount)
         public
         onlyMinter
+        onlyPositive(amount)
         returns (bool)
     {
-        _mint(account, amount);
         accounts[account].unassigned = accounts[account].unassigned.add(amount);
+        _mint(account, amount);
         return true;
 
     }
@@ -47,6 +49,7 @@ contract BSToken is ERC20Mintable {
      */
     function assignContext(bytes32 contextName, uint256 amount)
         external
+        onlyPositive(amount)
     {
         require(amount <= accounts[msg.sender].unassigned, INSUFFICIENT_UNASSIGNED);
 
@@ -116,5 +119,14 @@ contract BSToken is ERC20Mintable {
     function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
         revert(TRANSFER_ERROR);
         return false;
+    }
+
+    /**
+     * @dev Throws if the number is not bigger than zero.
+     * @param number The number to validate.
+     */
+    modifier onlyPositive(uint number) {
+        require(0 < number, INVALID_AMOUNT);
+        _;
     }
 }
