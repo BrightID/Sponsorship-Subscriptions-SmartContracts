@@ -23,6 +23,7 @@ contract BSMinter is Ownable, CanReclaimToken {
     string private constant MINT_ERROR = "Mint error";
     string private constant FINANCE_MESSAGE = "Revenue of BS Token Sale";
     string private constant INVALID_AMOUNT = "Invalid amount";
+    string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
     event TokensPurchased(address buyer, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
@@ -45,6 +46,8 @@ contract BSMinter is Ownable, CanReclaimToken {
         external
         onlyOwner
     {
+        require(isContract(purchaseTokenAddr), IS_NOT_CONTRACT);
+
         purchaseToken = ERC20(purchaseTokenAddr);
         emit PurchaseTokenSet(purchaseTokenAddr);
     }
