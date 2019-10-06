@@ -56,6 +56,7 @@ contract BSSMinter is Ownable, CanReclaimToken {
      */
     function purchase()
         external
+        returns (bool success)
     {
         uint256 totalSupply = bssToken.totalSupply();
         uint256 stepNumber = totalSupply.div(STEP);
@@ -78,7 +79,9 @@ contract BSSMinter is Ownable, CanReclaimToken {
             accounts[msg.sender].batches[timestamp] = bssAmount;
             emit TokensPurchased(msg.sender, bssAmount);
             require(bssToken.mint(msg.sender, bssAmount), MINT_ERROR);
+            return true;
         }
+        return false;
     }
 
     /**
