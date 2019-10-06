@@ -67,6 +67,7 @@ contract BSMinter is Ownable, CanReclaimToken {
      */
     function purchase()
         external
+        returns (bool success)
     {
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
         require(price <= allowance, INSUFFICIENT_PAYMENT);
@@ -78,7 +79,9 @@ contract BSMinter is Ownable, CanReclaimToken {
             finance.deposit(address(purchaseToken), purchaseAmount, FINANCE_MESSAGE);
             emit TokensPurchased(msg.sender, bsAmount);
             require(bsToken.mint(msg.sender, bsAmount), MINT_ERROR);
+            return true;
         }
+        return false;
     }
 
     /**
