@@ -7,6 +7,7 @@ import "./BSToken.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
 
+
 /**
  * @title BSS token minter contract.
  */

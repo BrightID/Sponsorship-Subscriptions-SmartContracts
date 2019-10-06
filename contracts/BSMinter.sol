@@ -4,17 +4,17 @@ import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./BSToken.sol";
 import "./Finance.sol";
+import "./CanReclaimToken.sol";
 
 
 /**
  * @title BS token minter contract.
  */
-contract BSMinter is Ownable {
+contract BSMinter is Ownable, CanReclaimToken {
     using SafeMath for uint256;
 
     BSToken internal bsToken;
     ERC20 internal purchaseToken;
-    Finance internal finance;
 
     uint256 public price;
 
@@ -26,7 +26,6 @@ contract BSMinter is Ownable {
 
     event TokensPurchased(address buyer, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
-    event FinanceSet(address financeAddr);
     event PriceSet(uint256 price);
 
     constructor(address bsTokenAddress, address purchaseTokenAddr, address financeAddress)
@@ -36,18 +35,6 @@ contract BSMinter is Ownable {
         finance = Finance(financeAddress);
         purchaseToken = ERC20(purchaseTokenAddr);
         price = 10**18;
-    }
-
-    /**
-     * @notice Set financeAddr as DAO finance.
-     * @param financeAddr The DAO finance's address.
-     */
-    function setFinance(address financeAddr)
-        external
-        onlyOwner
-    {
-        finance = Finance(financeAddr);
-        emit FinanceSet(financeAddr);
     }
 
     /**
