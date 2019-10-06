@@ -102,6 +102,8 @@ contract BSSMinter is Ownable, CanReclaimToken {
             allRevenue += (revenue * batch);
         }
         uint256 remained = allRevenue - accounts[msg.sender].received;
+        require(0 < remained, ALL_TOKENS_CLAIMED);
+
         accounts[msg.sender].received += remained;
         emit TokensClaimed(msg.sender, remained);
         require(bsToken.mint(msg.sender, remained), MINT_ERROR);
