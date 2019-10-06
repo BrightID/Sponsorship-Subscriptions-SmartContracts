@@ -22,7 +22,7 @@ contract BSMinter is Ownable, CanReclaimToken {
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
     string private constant FINANCE_MESSAGE = "Revenue of BS Token Sale";
-    string private constant INVALID_AMOUNT = "Invalid amount";
+    string private constant INVALID_PRICE = "Price must be greater than zero";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
     event TokensPurchased(address buyer, uint256 price);
@@ -59,8 +59,9 @@ contract BSMinter is Ownable, CanReclaimToken {
     function setPrice(uint256 _price)
         external
         onlyOwner
-        onlyPositive(_price)
     {
+        require(0 < _price, INVALID_PRICE);
+
         price = _price;
         emit PriceSet(price);
     }
@@ -87,12 +88,4 @@ contract BSMinter is Ownable, CanReclaimToken {
         return false;
     }
 
-    /**
-     * @dev Throws if the number is not bigger than zero.
-     * @param number The number to validate.
-     */
-    modifier onlyPositive(uint number) {
-        require(0 < number, INVALID_AMOUNT);
-        _;
-    }
 }
