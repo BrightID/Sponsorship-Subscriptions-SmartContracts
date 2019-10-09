@@ -92,12 +92,14 @@ contract BSSMinter is Ownable, CanReclaimToken {
         external
     {
         uint256 allRevenue;
-        require(accounts[msg.sender].received < 660, ALL_TOKENS_CLAIMED);
 
         for (uint i = 0; i < accounts[msg.sender].timestamps.length; i++) {
             uint256 timestamp = accounts[msg.sender].timestamps[i];
             uint256 batch = accounts[msg.sender].batches[timestamp];
             uint256 m = (now - timestamp) / (30*24*3600);
+            if (121 < m) {
+                m = 121;
+            }
             uint256 y = m / 12;
             uint256 revenue = 6 * y * (y + 1) + (m % 12) * (y + 1);
             allRevenue += (revenue * batch);
