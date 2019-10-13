@@ -30,11 +30,11 @@ contract BSTMinter is Ownable, CanReclaimToken {
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
-    constructor(address bsTokenAddress, address purchaseTokenAddr, address financeAddress)
+    constructor(address bstAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
-        bsToken = BSToken(bsTokenAddress);
-        finance = Finance(financeAddress);
+        bsToken = BSToken(bstAddr);
+        finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
         price = 10**18;
     }
