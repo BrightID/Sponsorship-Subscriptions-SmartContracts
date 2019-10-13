@@ -2,8 +2,8 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./BSSToken.sol";
 import "./BSToken.sol";
+import "./BSSToken.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
 
@@ -24,20 +24,11 @@ contract BSSTMinter is Ownable, CanReclaimToken {
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
     string private constant FINANCE_MESSAGE = "Revenue of BSS Token Sale";
-    string private constant ALL_TOKENS_CLAIMED = "All tokens claimed";
 
     mapping(uint256 => uint256) private prices;
 
-    struct Account {
-        uint256 received;
-        uint256[] timestamps;
-        mapping (uint256 => uint256) batches;
-    }
-
-    mapping(address => Account) private accounts;
-
     event TokensPurchased(address buyer, uint256 price);
-    event TokensClaimed(address owner, uint256 amount);
+    event TokensClaimed(address account, uint256 amount);
 
     constructor(address bsTokenAddr, address bssTokenAddr, address purchaseTokenAddr, address financeAddr)
         public
@@ -46,8 +37,8 @@ contract BSSTMinter is Ownable, CanReclaimToken {
         prices[1] = 25 * 10**18;
         prices[2] = 50 * 10**18;
         prices[3] = 100 * 10**18;
-        bssToken = BSSToken(bssTokenAddr);
         bsToken = BSToken(bsTokenAddr);
+        bssToken = BSSToken(bssTokenAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
     }
@@ -71,45 +62,30 @@ contract BSSTMinter is Ownable, CanReclaimToken {
             bssAmount = availableTokens;
         }
         uint256 purchaseAmount = bssAmount.mul(price);
-
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseAmount)) {
             require(purchaseToken.approve(address(finance), purchaseAmount), APPROVE_ERROR);
+
             finance.deposit(address(purchaseToken), purchaseAmount, FINANCE_MESSAGE);
-            uint256 timestamp = now;
-            accounts[msg.sender].timestamps.push(timestamp);
-            accounts[msg.sender].batches[timestamp] = bssAmount;
+
             emit TokensPurchased(msg.sender, bssAmount);
             require(bssToken.mint(msg.sender, bssAmount), MINT_ERROR);
+
             return true;
         }
         return false;
     }
 
     /**
-     * @notice Claim BS token.
+     * @notice claim BST
      */
     function claim()
         external
+        returns (bool success)
     {
-        uint256 allRevenue;
-
-        for (uint i = 0; i < accounts[msg.sender].timestamps.length; i++) {
-            uint256 timestamp = accounts[msg.sender].timestamps[i];
-            uint256 batch = accounts[msg.sender].batches[timestamp];
-            uint256 m = (now - timestamp) / (30*24*3600);
-            if (120 < m) {
-                m = 120;
-            }
-            uint256 y = m / 12;
-            uint256 revenue = 6 * y * (y + 1) + (m % 12) * (y + 1);
-            allRevenue += (revenue * batch);
-        }
-        uint256 remained = allRevenue - accounts[msg.sender].received;
-        require(0 < remained, ALL_TOKENS_CLAIMED);
-
-        accounts[msg.sender].received += remained;
-        emit TokensClaimed(msg.sender, remained);
-        require(bsToken.mint(msg.sender, remained), MINT_ERROR);
+        uint256 claimableAmount = bssToken.claim(msg.sender);
+        emit TokensClaimed(msg.sender, claimableAmount);
+        require(bsToken.mint(msg.sender, claimableAmount), MINT_ERROR);
+        return true;
     }
 
     /**
