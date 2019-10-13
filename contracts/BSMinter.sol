@@ -8,9 +8,10 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title BS token minter contract.
+ * @title BST minter contract.
  */
-contract BSMinter is Ownable, CanReclaimToken {
+contract BSTMinter is Ownable, CanReclaimToken {
+
     using SafeMath for uint256;
 
     BSToken internal bsToken;
@@ -21,7 +22,7 @@ contract BSMinter is Ownable, CanReclaimToken {
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
-    string private constant FINANCE_MESSAGE = "Revenue of BS Token Sale";
+    string private constant FINANCE_MESSAGE = "Revenue of BST Sale";
     string private constant INVALID_PRICE = "Price must be greater than zero";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
@@ -53,8 +54,8 @@ contract BSMinter is Ownable, CanReclaimToken {
     }
 
     /**
-     * @notice Set BS tokens price.
-     * @param _price a BS tokens are worth how many purchase token.
+     * @notice Set BST price.
+     * @param _price a BST is worth how many purchase token.
      */
     function setPrice(uint256 _price)
         external
@@ -67,7 +68,7 @@ contract BSMinter is Ownable, CanReclaimToken {
     }
 
     /**
-     * @notice purchase BS token.
+     * @notice purchase BST.
      */
     function purchase()
         external
@@ -75,14 +76,17 @@ contract BSMinter is Ownable, CanReclaimToken {
     {
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
         require(price <= allowance, INSUFFICIENT_PAYMENT);
-        uint256 bsAmount = allowance.div(price);
-        uint256 purchaseAmount = bsAmount.mul(price);
 
-        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseAmount)) {
-            require(purchaseToken.approve(address(finance), purchaseAmount), APPROVE_ERROR);
-            finance.deposit(address(purchaseToken), purchaseAmount, FINANCE_MESSAGE);
-            emit TokensPurchased(msg.sender, bsAmount);
-            require(bsToken.mint(msg.sender, bsAmount), MINT_ERROR);
+        uint256 bstAmount = allowance.div(price);
+        uint256 purchaseTokenAmount = bstAmount.mul(price);
+
+        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
+            require(purchaseToken.approve(address(finance), purchaseTokenAmount), APPROVE_ERROR);
+
+            finance.deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            emit TokensPurchased(msg.sender, bstAmount);
+            require(bsToken.mint(msg.sender, bstAmount), MINT_ERROR);
+
             return true;
         }
         return false;
