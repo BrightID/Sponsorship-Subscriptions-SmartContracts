@@ -9,9 +9,9 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title BSS token minter contract.
+ * @title BSST minter contract.
  */
-contract BSSMinter is Ownable, CanReclaimToken {
+contract BSSTMinter is Ownable, CanReclaimToken {
     using SafeMath for uint256;
 
     BSToken internal bsToken;
@@ -97,8 +97,8 @@ contract BSSMinter is Ownable, CanReclaimToken {
             uint256 timestamp = accounts[msg.sender].timestamps[i];
             uint256 batch = accounts[msg.sender].batches[timestamp];
             uint256 m = (now - timestamp) / (30*24*3600);
-            if (121 < m) {
-                m = 121;
+            if (120 < m) {
+                m = 120;
             }
             uint256 y = m / 12;
             uint256 revenue = 6 * y * (y + 1) + (m % 12) * (y + 1);
