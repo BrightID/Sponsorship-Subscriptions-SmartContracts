@@ -47,11 +47,11 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
     }
 
     /**
-     * @notice count claimable amount
+     * @notice claim BST
      * @param account The account.
      */
     function claim(address account)
-        public
+        external
         onlyMinter
         returns (uint256 amount)
     {
