@@ -26,7 +26,7 @@ contract BSTMinter is Ownable, CanReclaimToken {
     string private constant INVALID_PRICE = "Price must be greater than zero";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
-    event TokensPurchased(address buyer, uint256 price);
+    event TokensPurchased(address account, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
