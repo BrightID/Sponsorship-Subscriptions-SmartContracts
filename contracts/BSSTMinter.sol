@@ -23,22 +23,22 @@ contract BSSTMinter is Ownable, CanReclaimToken {
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
-    string private constant FINANCE_MESSAGE = "Revenue of BSS Token Sale";
+    string private constant FINANCE_MESSAGE = "Revenue of BSS token sale";
 
     mapping(uint256 => uint256) private prices;
 
-    event TokensPurchased(address buyer, uint256 price);
+    event TokensPurchased(address account, uint256 price);
     event TokensClaimed(address account, uint256 amount);
 
-    constructor(address bsTokenAddr, address bssTokenAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address bstAddr, address bsstAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
         prices[0] = 16 * 10**18;
         prices[1] = 25 * 10**18;
         prices[2] = 50 * 10**18;
         prices[3] = 100 * 10**18;
-        bsToken = BSToken(bsTokenAddr);
-        bssToken = BSSToken(bssTokenAddr);
+        bsToken = BSToken(bstAddr);
+        bssToken = BSSToken(bsstAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
     }
@@ -53,22 +53,21 @@ contract BSSTMinter is Ownable, CanReclaimToken {
         uint256 totalSupply = bssToken.totalSupply();
         uint256 stepNumber = totalSupply.div(STEP);
         uint256 price = prices[stepNumber];
-        uint256 availableTokens = (stepNumber + 1) * STEP - totalSupply;
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
         require(price <= allowance, INSUFFICIENT_PAYMENT);
 
-        uint256 bssAmount = allowance.div(price);
-        if (availableTokens < bssAmount) {
-            bssAmount = availableTokens;
+        uint256 availableTokens = (stepNumber + 1) * STEP - totalSupply;
+        uint256 bsstAmount = allowance.div(price);
+        if (availableTokens < bsstAmount) {
+            bsstAmount = availableTokens;
         }
-        uint256 purchaseAmount = bssAmount.mul(price);
-        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseAmount)) {
-            require(purchaseToken.approve(address(finance), purchaseAmount), APPROVE_ERROR);
+        uint256 purchaseTokenAmount = bsstAmount.mul(price);
+        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
+            require(purchaseToken.approve(address(finance), purchaseTokenAmount), APPROVE_ERROR);
 
-            finance.deposit(address(purchaseToken), purchaseAmount, FINANCE_MESSAGE);
-
-            emit TokensPurchased(msg.sender, bssAmount);
-            require(bssToken.mint(msg.sender, bssAmount), MINT_ERROR);
+            finance.deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            emit TokensPurchased(msg.sender, bsstAmount);
+            require(bssToken.mint(msg.sender, bsstAmount), MINT_ERROR);
 
             return true;
         }
