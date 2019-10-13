@@ -5,10 +5,11 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title BS token contract.
+ * @title BST contract.
  * @dev ERC20 token contract.
  */
 contract BSToken is ERC20Mintable, CanReclaimToken {
+
     string private constant TRANSFER_ERROR = "BST is not transferable.";
     string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
@@ -27,9 +28,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
     mapping(bytes32 => uint256) private contextsBalance;
 
     /**
-     * @notice Mint BS token.
+     * @notice Mint BST.
      * @param account The receiver account.
-     * @param amount number of BS tokens.
+     * @param amount number of BST.
      */
     function mint(address account, uint256 amount)
         public
@@ -40,13 +41,12 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         accounts[account].unassigned = accounts[account].unassigned.add(amount);
         _mint(account, amount);
         return true;
-
     }
 
     /**
-     * @notice Assign BS token to a context.
+     * @notice Assign some BST to a context.
      * @param contextName The context's name.
-     * @param amount number of BS tokens.
+     * @param amount number of BST.
      */
     function assignContext(bytes32 contextName, uint256 amount)
         external
@@ -61,7 +61,7 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of tokens assigned to a context.
+     * @notice Returns the amount of BSTs assigned to a context.
      * @param contextName The context's name.
      */
     function totalContextBalance(bytes32 contextName)
@@ -73,8 +73,8 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of tokens assigned by an account to a contextName.
-     * @param account The address of BS token holder.
+     * @notice Returns the amount of BSTs assigned by an account to a contextName.
+     * @param account The BST holder.
      * @param contextName The context's name.
      */
     function contextBalance(address account, bytes32 contextName)
@@ -86,8 +86,8 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of tokens owned by the account.
-     * @param account The address of BS token holder.
+     * @notice Returns the amount of unassigned BSTs owned by the account.
+     * @param account The BST holder.
      */
     function unassignedBalance(address account)
         external
@@ -97,6 +97,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         return accounts[account].unassigned;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function transfer(address recipient, uint256 amount)
         public
         returns (bool)
@@ -105,6 +108,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function approve(address spender, uint256 value)
         public
         returns (bool)
@@ -113,6 +119,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function transferFrom(address sender, address recipient, uint256 amount)
         public
         returns (bool)
@@ -121,6 +130,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function increaseAllowance(address spender, uint256 addedValue)
         public
         returns (bool)
@@ -129,6 +141,9 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function decreaseAllowance(address spender, uint256 subtractedValue)
         public
         returns (bool)
