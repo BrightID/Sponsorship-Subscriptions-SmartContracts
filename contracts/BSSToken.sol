@@ -5,10 +5,11 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title BSS token contract.
+ * @title BSST contract.
   * @dev ERC20 token contract.
  */
 contract BSSToken is ERC20Capped, CanReclaimToken {
+
     string private constant TRANSFER_ERROR = "BSST is not transferable.";
 
     string public constant name = "BrightID Sponsorship Subscription Token";
@@ -17,6 +18,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
 
     constructor(uint256 _cap) ERC20Capped(_cap) public {}
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function transfer(address recipient, uint256 amount)
         public
         returns (bool)
@@ -25,6 +29,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function approve(address spender, uint256 value)
         public
         returns (bool)
@@ -33,6 +40,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function transferFrom(address sender, address recipient, uint256 amount)
         public
         returns (bool)
@@ -41,6 +51,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function increaseAllowance(address spender, uint256 addedValue)
         public
         returns (bool)
@@ -49,6 +62,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         return false;
     }
 
+    /**
+     * @dev override inherited method to make tokens non-transferable.
+     */
     function decreaseAllowance(address spender, uint256 subtractedValue)
         public
         returns (bool)
