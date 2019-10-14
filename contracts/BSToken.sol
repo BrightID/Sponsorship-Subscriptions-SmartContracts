@@ -16,7 +16,7 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
 
     string public constant name = "BrightID Sponsorship Token";
     string public constant symbol = "BST";
-    uint32 public constant decimals = 0;
+    uint8 public constant decimals = 0;
 
     struct Account {
         uint256 assigned;
@@ -160,4 +160,5 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         require(0 < number, INVALID_AMOUNT);
         _;
     }
+
 }

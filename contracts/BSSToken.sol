@@ -16,7 +16,7 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
 
     string public constant name = "BrightID Sponsorship Subscription Token";
     string public constant symbol = "BSST";
-    uint32 public constant decimals = 0;
+    uint8 public constant decimals = 0;
 
     struct Account {
         uint256 received;
