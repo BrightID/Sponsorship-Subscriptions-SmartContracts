@@ -8,11 +8,10 @@ import "./Finance.sol";
 contract CanReclaimToken is Ownable {
 
     Finance public finance;
-
     ERC20 internal token;
 
     string private constant APPROVE_ERROR = "Approve error";
-    string private constant FINANCE_MESSAGE = "Reclaim tokens";
+    string private constant RECLAIM_MESSAGE = "Reclaim tokens";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
     event ClaimedTokens(address tokenAddr, uint256 amount);
@@ -37,19 +36,22 @@ contract CanReclaimToken is Ownable {
      * @param tokenAddr The address of the token contract
      */
     function reclaimToken(address tokenAddr)
-    	external
-    	onlyOwner
+        external
+        onlyOwner
     {
-    	token = ERC20(tokenAddr);
+        require(isContract(tokenAddr), IS_NOT_CONTRACT);
+
+        token = ERC20(tokenAddr);
         uint256 balance = token.balanceOf(address(this));
         require(token.approve(address(finance), balance), APPROVE_ERROR);
-        finance.deposit(address(tokenAddr), balance, FINANCE_MESSAGE);
+
+        finance.deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
         emit ClaimedTokens(tokenAddr, balance);
     }
 
     /**
      * @notice Check an address is a contract or not
-     * @param addr The address that should be checked
+     * @param addr The address that should check
      */
     function isContract(address addr)
         internal
