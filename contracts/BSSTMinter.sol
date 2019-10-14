@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./BSToken.sol";
 import "./BSSToken.sol";
 import "./Finance.sol";
@@ -11,7 +10,7 @@ import "./CanReclaimToken.sol";
 /**
  * @title BSST minter contract.
  */
-contract BSSTMinter is Ownable, CanReclaimToken {
+contract BSSTMinter is CanReclaimToken {
     using SafeMath for uint256;
 
     BSToken internal bsToken;
