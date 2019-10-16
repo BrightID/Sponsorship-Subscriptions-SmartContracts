@@ -13,6 +13,7 @@ contract CanReclaimToken is Ownable {
     string private constant APPROVE_ERROR = "Approve error";
     string private constant RECLAIM_MESSAGE = "Reclaim tokens";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
+    string private constant ZERO_BALANCE = "There is no coin";
 
     event ClaimedTokens(address tokenAddr, uint256 amount);
     event FinanceSet(address financeAddr);
@@ -35,7 +36,7 @@ contract CanReclaimToken is Ownable {
      * @dev Reclaim all ERC20 tokens
      * @param tokenAddr The address of the token contract
      */
-    function reclaimToken(address tokenAddr)
+    function reclaimTokens(address tokenAddr)
         external
         onlyOwner
     {
@@ -43,6 +44,8 @@ contract CanReclaimToken is Ownable {
 
         token = ERC20(tokenAddr);
         uint256 balance = token.balanceOf(address(this));
+        require(0 < balance, ZERO_BALANCE);
+
         require(token.approve(address(finance), balance), APPROVE_ERROR);
 
         finance.deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
@@ -56,7 +59,7 @@ contract CanReclaimToken is Ownable {
     function isContract(address addr)
         internal
         view
-        returns(bool)
+        returns (bool)
     {
         uint size;
         if (addr == address(0)) {
