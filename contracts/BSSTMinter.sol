@@ -17,12 +17,14 @@ contract BSSTMinter is CanReclaimToken {
     BSSToken internal bssToken;
     ERC20 internal purchaseToken;
 
+    uint256 public cap;
     uint256 public constant STEP = 25000;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
     string private constant FINANCE_MESSAGE = "Revenue of BSS token sale";
+    string private constant CAP_EXCEEDED = "Cap exceeded";
 
     mapping(uint256 => uint256) private prices;
 
@@ -40,6 +42,7 @@ contract BSSTMinter is CanReclaimToken {
         bssToken = BSSToken(bsstAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
+        cap = bssToken.cap();
     }
 
     /**
@@ -50,6 +53,8 @@ contract BSSTMinter is CanReclaimToken {
         returns (bool success)
     {
         uint256 totalSupply = bssToken.totalSupply();
+        require(totalSupply < cap, CAP_EXCEEDED);
+
         uint256 stepNumber = totalSupply.div(STEP);
         uint256 price = prices[stepNumber];
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
@@ -92,10 +97,13 @@ contract BSSTMinter is CanReclaimToken {
     function price()
         external
         view
-        returns(uint256)
+        returns (uint256)
     {
         uint256 totalSupply = bssToken.totalSupply();
-        uint256 stepNumber = totalSupply.div(STEP);
-        return prices[stepNumber];
+        if (totalSupply < cap) {
+            uint256 stepNumber = totalSupply.div(STEP);
+            return prices[stepNumber];
+        }
+        return prices[3];
     }
 }
