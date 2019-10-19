@@ -17,6 +17,7 @@ contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
     string private constant ALL_SPONSORSHIPS_CLAIMED = "All Sponsorships claimed";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
     string private constant ONLY_SPMINTER = "Caller is not the SponsorshipsMinter";
+    string private constant ZERO_ADDRESS = "SponsorshipsMinter is the zero address";
 
     struct Account {
         uint256 received;
@@ -36,7 +37,7 @@ contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
         external
         onlyOwner
     {
-        require(_spMinterAddr != address(0), "SponsorshipsMinter is the zero address");
+        require(_spMinterAddr != address(0), ZERO_ADDRESS);
 
         spMinterAddr = _spMinterAddr;
     }
