@@ -1,32 +1,31 @@
-var BSToken = artifacts.require('BSToken.sol');
-var BSTMinter = artifacts.require('BSTMinter.sol');
+var Sp = artifacts.require('Sponsorships.sol');
+var SpMinter = artifacts.require('SponsorshipsMinter.sol');
 
-var BSSToken = artifacts.require('BSSToken.sol');
-var BSSTMinter = artifacts.require('BSSTMinter.sol');
+var Subs = artifacts.require('Subscriptions.sol');
+var SubsMinter = artifacts.require('SubscriptionsMinter.sol');
 
-var cap = 100000;
-
-var financeAddr = '';
-var purchaseTokenAddr = '';
+const cap = 900000;
+const financeAddr = '';
+const purchaseTokenAddr = '';
 
 module.exports = function (deployer) {
   deployer.then(async () => {
 
-    await deployer.deploy(BSSToken, cap);
-    const instanceBSSToken = await BSSToken.deployed();
+    await deployer.deploy(Sp);
+    const instanceSp = await Sp.deployed();
 
-    await deployer.deploy(BSToken);
-    const instanceBSToken = await BSToken.deployed();
+    await deployer.deploy(Subs, cap);
+    const instanceSubs = await Subs.deployed();
 
-    await deployer.deploy(BSTMinter, instanceBSToken.address, purchaseTokenAddr, financeAddr);
-    const instanceBSTMinter = await BSTMinter.deployed();
+    await deployer.deploy(SpMinter, instanceSp.address, instanceSubs.address, purchaseTokenAddr, financeAddr);
+    const instanceSpMinter = await SpMinter.deployed();
 
-    await deployer.deploy(BSSTMinter, instanceBSToken.address, instanceBSSToken.address, purchaseTokenAddr, financeAddr);
-    const instanceBSSTMinter = await BSSTMinter.deployed();
+    await deployer.deploy(SubsMinter, instanceSubs.address, purchaseTokenAddr, financeAddr);
+    const instanceSubsMinter = await SubsMinter.deployed();
 
-    await instanceBSToken.addMinter(instanceBSTMinter.address);
-    await instanceBSToken.addMinter(instanceBSSTMinter.address);
-    await instanceBSSToken.addMinter(instanceBSSTMinter.address);
+    await instanceSp.addMinter(instanceSpMinter.address);
+    await instanceSubs.addMinter(instanceSubsMinter.address);
+    await instanceSubs.setSpMinter(instanceSpMinter.address);
 
   })
 }
