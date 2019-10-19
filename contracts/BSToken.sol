@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
+import "./NonTransferAble.sol";
 import "./CanReclaimToken.sol";
 
 
@@ -8,15 +8,13 @@ import "./CanReclaimToken.sol";
  * @title BST contract.
  * @dev ERC20 token contract.
  */
-contract BSToken is ERC20Mintable, CanReclaimToken {
-
-    string private constant TRANSFER_ERROR = "BST is not transferable.";
-    string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
-    string private constant INVALID_AMOUNT = "Amount must be greater than zero";
-
+contract BSToken is NonTransferAble, CanReclaimToken {
     string public constant name = "BrightID Sponsorship Token";
     string public constant symbol = "BST";
     uint8 public constant decimals = 0;
+
+    string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
+    string private constant INVALID_AMOUNT = "Amount must be greater than zero";
 
     struct Account {
         uint256 assigned;
@@ -95,61 +93,6 @@ contract BSToken is ERC20Mintable, CanReclaimToken {
         returns(uint256)
     {
         return accounts[account].unassigned;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function transfer(address recipient, uint256 amount)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function approve(address spender, uint256 value)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function transferFrom(address sender, address recipient, uint256 amount)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function increaseAllowance(address spender, uint256 addedValue)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function decreaseAllowance(address spender, uint256 subtractedValue)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
     }
 
     /**
