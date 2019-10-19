@@ -1,22 +1,19 @@
 pragma solidity ^0.5.0;
 
-import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
+import "./NonTransferAbleCapped.sol";
 import "./CanReclaimToken.sol";
 
 
 /**
  * @title BSST contract.
-  * @dev ERC20 token contract.
  */
-contract BSSToken is ERC20Capped, CanReclaimToken {
-
-    string private constant TRANSFER_ERROR = "BSST is not transferable.";
-    string private constant ALL_TOKENS_CLAIMED = "All tokens claimed";
-    string private constant INVALID_AMOUNT = "Amount must be greater than zero";
-
+contract BSSToken is NonTransferAbleCapped, CanReclaimToken {
     string public constant name = "BrightID Sponsorship Subscription Token";
     string public constant symbol = "BSST";
     uint8 public constant decimals = 0;
+
+    string private constant ALL_TOKENS_CLAIMED = "All tokens claimed";
+    string private constant INVALID_AMOUNT = "Amount must be greater than zero";
 
     struct Account {
         uint256 received;
@@ -76,13 +73,9 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         for (uint i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             uint256 batch = accounts[account].batches[timestamp];
-            
             // Start with one claimable sponsorship immediately.
-            
             uint256 m = ((now - timestamp) / (30*24*3600)) + 1;
-            
             // Subscriptions end after 252 sponsorships (a little less than 6 years).
-            
             if (72 < m) {
                 m = 72;
             }
@@ -92,61 +85,6 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         }
         uint256 claimableAmount = allProduced - accounts[account].received;
         return claimableAmount;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function transfer(address recipient, uint256 amount)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function approve(address spender, uint256 value)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function transferFrom(address sender, address recipient, uint256 amount)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function increaseAllowance(address spender, uint256 addedValue)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
-    }
-
-    /**
-     * @dev override inherited method to make tokens non-transferable.
-     */
-    function decreaseAllowance(address spender, uint256 subtractedValue)
-        public
-        returns (bool)
-    {
-        revert(TRANSFER_ERROR);
-        return false;
     }
 
     /**
