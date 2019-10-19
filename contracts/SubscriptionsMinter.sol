@@ -18,7 +18,6 @@ contract SubscriptionsMinter is CanReclaimToken {
     ERC20 internal purchaseToken;
 
     uint256 public cap;
-    uint256 public constant STEP = 25000;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
@@ -26,17 +25,22 @@ contract SubscriptionsMinter is CanReclaimToken {
     string private constant FINANCE_MESSAGE = "Revenue of Subscriptions sale";
     string private constant CAP_EXCEEDED = "Cap exceeded";
 
-    mapping(uint256 => uint256) private prices;
+    struct Step {
+        uint256 border;
+        uint256 price;
+    }
+
+    mapping(uint8 => Step) private steps;
 
     event SubscriptionsPurchased(address account, uint256 price);
 
     constructor(address subsAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
-        prices[0] = 16 * 10**18;
-        prices[1] = 25 * 10**18;
-        prices[2] = 50 * 10**18;
-        prices[3] = 100 * 10**18;
+        steps[0].border = 400000;
+        steps[0].price = 10**18;
+        steps[1].border = 900000;
+        steps[1].price = 2 * 10**18;
         subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
@@ -50,15 +54,21 @@ contract SubscriptionsMinter is CanReclaimToken {
         external
         returns (bool success)
     {
+        uint8 stepNumber;
         uint256 totalSupply = subs.totalSupply();
         require(totalSupply < cap, CAP_EXCEEDED);
 
-        uint256 stepNumber = totalSupply.div(STEP);
-        uint256 price = prices[stepNumber];
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
+        if (totalSupply < steps[0].border) {
+            stepNumber = 0;
+        }
+        else {
+            stepNumber = 1;
+        }
+        uint256 price = steps[stepNumber].price;
         require(price <= allowance, INSUFFICIENT_PAYMENT);
 
-        uint256 availableSubs = (stepNumber + 1) * STEP - totalSupply;
+        uint256 availableSubs = steps[stepNumber].border - totalSupply;
         uint256 subsAmount = allowance.div(price);
         if (availableSubs < subsAmount) {
             subsAmount = availableSubs;
@@ -85,10 +95,10 @@ contract SubscriptionsMinter is CanReclaimToken {
         returns (uint256)
     {
         uint256 totalSupply = subs.totalSupply();
-        if (totalSupply < cap) {
-            uint256 stepNumber = totalSupply.div(STEP);
-            return prices[stepNumber];
+        if (totalSupply < steps[0].border) {
+            return steps[0].price;
         }
-        return prices[3];
+        return steps[1].price;
     }
+
 }
