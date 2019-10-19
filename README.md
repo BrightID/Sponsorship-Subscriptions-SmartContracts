@@ -1,2 +1,2 @@
-# BrightID-BST-SmartContracts
-BST and BSST smart contracts
+# BrightID-Sponsorship-Subscriptions-SmartContracts
+BrightID Sponsorship and Subscriptions Smart Contracts
