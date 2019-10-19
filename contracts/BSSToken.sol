@@ -71,7 +71,7 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         view
         returns (uint256 amount)
     {
-        uint256 allRevenue;
+        uint256 allProduced;
 
         for (uint i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
@@ -87,10 +87,10 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
                 m = 72;
             }
             uint256 y = m / 12;
-            uint256 revenue = 6 * y * (y + 1) + (m % 12) * (y + 1);
-            allRevenue += (revenue * batch);
+            uint256 produced = 6 * y * (y + 1) + (m % 12) * (y + 1);
+            allProduced += (produced * batch);
         }
-        uint256 claimableAmount = allRevenue - accounts[account].received;
+        uint256 claimableAmount = allProduced - accounts[account].received;
         return claimableAmount;
     }
 
