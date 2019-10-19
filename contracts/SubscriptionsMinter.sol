@@ -2,7 +2,6 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./Sponsorships.sol";
 import "./Subscriptions.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
@@ -99,6 +98,16 @@ contract SubscriptionsMinter is CanReclaimToken {
             return steps[0].price;
         }
         return steps[1].price;
+    }
+
+   /**
+     * @notice renounce minter role.
+     */
+    function renounceMinterRole()
+        external
+        onlyOwner
+    {
+        subs.renounceMinter();
     }
 
 }
