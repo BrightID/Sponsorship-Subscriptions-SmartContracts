@@ -76,9 +76,15 @@ contract BSSToken is ERC20Capped, CanReclaimToken {
         for (uint i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             uint256 batch = accounts[account].batches[timestamp];
-            uint256 m = (now - timestamp) / (30*24*3600);
-            if (120 < m) {
-                m = 120;
+            
+            // Start with one claimable sponsorship immediately.
+            
+            uint256 m = ((now - timestamp) / (30*24*3600)) + 1;
+            
+            // Subscriptions end after 252 sponsorships (a little less than 6 years).
+            
+            if (72 < m) {
+                m = 72;
             }
             uint256 y = m / 12;
             uint256 revenue = 6 * y * (y + 1) + (m % 12) * (y + 1);
