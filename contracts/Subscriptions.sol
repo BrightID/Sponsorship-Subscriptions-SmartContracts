@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import "./NonTransferAbleCapped.sol";
+import "./NonTransferableCapped.sol";
 import "./CanReclaimToken.sol";
 
 
 /**
  * @title Subscriptions contract.
  */
-contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
+contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     string public constant name = "Subscriptions";
     string public constant symbol = "SUBS";
     uint8 public constant decimals = 0;
@@ -27,7 +27,7 @@ contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
 
     mapping(address => Account) private accounts;
 
-    constructor(uint256 _cap) NonTransferAbleCapped(_cap) public {}
+    constructor(uint256 _cap) NonTransferableCapped(_cap) public {}
 
     /**
      * @notice Set SponsorshipsMinter address.

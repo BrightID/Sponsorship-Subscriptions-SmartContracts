@@ -4,7 +4,7 @@ import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
 
 
-contract NonTransferAble is MinterRole {
+contract NonTransferable is MinterRole {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -37,7 +37,7 @@ contract NonTransferAble is MinterRole {
      * - `to` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal {
-        require(account != address(0), "NonTransferAbleToken: mint to the zero address");
+        require(account != address(0), "NonTransferableToken: mint to the zero address");
 
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);

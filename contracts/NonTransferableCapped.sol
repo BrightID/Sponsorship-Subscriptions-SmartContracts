@@ -1,11 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "./NonTransferAble.sol";
+import "./NonTransferable.sol";
 
 /**
- * @dev Extension of `NonTransferAble` that adds a cap to the supply of tokens.
+ * @dev Extension of `NonTransferable` that adds a cap to the supply of tokens.
  */
-contract NonTransferAbleCapped is NonTransferAble {
+contract NonTransferableCapped is NonTransferable {
     uint256 private _cap;
 
     /**
@@ -13,7 +13,7 @@ contract NonTransferAbleCapped is NonTransferAble {
      * set once during construction.
      */
     constructor (uint256 cap) public {
-        require(cap > 0, "NonTransferAbleTokenCapped: cap is 0");
+        require(cap > 0, "NonTransferableTokenCapped: cap is 0");
         _cap = cap;
     }
 
@@ -25,14 +25,14 @@ contract NonTransferAbleCapped is NonTransferAble {
     }
 
     /**
-     * @dev See `NonTransferAbleToken.mint`.
+     * @dev See `NonTransferableToken.mint`.
      *
      * Requirements:
      *
      * - `value` must not cause the total supply to go over the cap.
      */
     function _mint(address account, uint256 value) internal {
-        require(totalSupply().add(value) <= _cap, "NonTransferAbleTokenCapped: cap exceeded");
+        require(totalSupply().add(value) <= _cap, "NonTransferableTokenCapped: cap exceeded");
         super._mint(account, value);
     }
 
