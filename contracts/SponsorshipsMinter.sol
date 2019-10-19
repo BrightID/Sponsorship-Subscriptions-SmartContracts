@@ -1,19 +1,21 @@
 pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "./BSToken.sol";
+import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./Sponsorships.sol";
+import "./Subscriptions.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
 
 
 /**
- * @title BST minter contract.
+ * @title Sponsorships minter contract.
  */
-contract BSTMinter is CanReclaimToken {
-
+contract SponsorshipsMinter is CanReclaimToken {
     using SafeMath for uint256;
 
-    BSToken internal bsToken;
+    Sponsorships internal sp;
+    Subscriptions internal subs;
     ERC20 internal purchaseToken;
 
     uint256 public price;
@@ -21,18 +23,20 @@ contract BSTMinter is CanReclaimToken {
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
     string private constant MINT_ERROR = "Mint error";
-    string private constant FINANCE_MESSAGE = "Revenue of BST Sale";
+    string private constant FINANCE_MESSAGE = "Revenue of Sponsorships Sale";
     string private constant INVALID_PRICE = "Price must be greater than zero";
     string private constant IS_NOT_CONTRACT = "It is not a contract's address";
 
-    event TokensPurchased(address account, uint256 price);
+    event SponsorshipsPurchased(address account, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
+    event SponsorshipsClaimed(address account, uint256 amount);
 
-    constructor(address bstAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
-        bsToken = BSToken(bstAddr);
+        sp = Sponsorships(spAddr);
+        subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
         price = 10**18;
@@ -53,8 +57,8 @@ contract BSTMinter is CanReclaimToken {
     }
 
     /**
-     * @notice Set BST price.
-     * @param _price a BST is worth how many purchase token.
+     * @notice Set Sponsorship price.
+     * @param _price a Sponsorship is worth how many purchase token.
      */
     function setPrice(uint256 _price)
         external
@@ -67,7 +71,7 @@ contract BSTMinter is CanReclaimToken {
     }
 
     /**
-     * @notice purchase BST.
+     * @notice purchase Sponsorship.
      */
     function purchase()
         external
@@ -76,19 +80,33 @@ contract BSTMinter is CanReclaimToken {
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
         require(price <= allowance, INSUFFICIENT_PAYMENT);
 
-        uint256 bstAmount = allowance.div(price);
-        uint256 purchaseTokenAmount = bstAmount.mul(price);
+        uint256 spAmount = allowance.div(price);
+        uint256 purchaseTokenAmount = spAmount.mul(price);
 
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
             require(purchaseToken.approve(address(finance), purchaseTokenAmount), APPROVE_ERROR);
 
             finance.deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
-            emit TokensPurchased(msg.sender, bstAmount);
-            require(bsToken.mint(msg.sender, bstAmount), MINT_ERROR);
+            emit SponsorshipsPurchased(msg.sender, spAmount);
+            require(sp.mint(msg.sender, spAmount), MINT_ERROR);
 
             return true;
         }
         return false;
+    }
+
+    /**
+     * @notice claim Sponsorships.
+     */
+    function claim()
+        external
+        returns (bool success)
+    {
+        uint256 claimableAmount = subs.claim(msg.sender);
+        emit SponsorshipsClaimed(msg.sender, claimableAmount);
+        require(sp.mint(msg.sender, claimableAmount), MINT_ERROR);
+
+        return true;
     }
 
 }
