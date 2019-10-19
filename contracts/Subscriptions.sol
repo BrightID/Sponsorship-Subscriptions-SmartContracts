@@ -76,7 +76,7 @@ contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
     }
 
     /**
-     * @notice Count claimable amount.
+     * @notice Count claimable amount
      * @param account The account.
      */
     function claimable(address account)
@@ -89,13 +89,15 @@ contract Subscriptions is NonTransferAbleCapped, CanReclaimToken {
         for (uint i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             uint256 batch = accounts[account].batches[timestamp];
-            uint256 m = (now - timestamp) / (30*24*3600);
-            if (71 < m) {
-                m = 71;
+            // Start with one claimable sponsorship immediately.
+            uint256 m = ((now - timestamp) / (30*24*3600)) + 1;
+            // Subscriptions end after 252 sponsorships (a little less than 6 years).
+            if (72 < m) {
+                m = 72;
             }
-            uint256 y = (m + 1) / 12;
-            uint256 produced = 6 * y * (y + 1) + ((m + 1) % 12) * (y + 1);
-            allProduced += produced * batch;
+            uint256 y = m / 12;
+            uint256 produced = 6 * y * (y + 1) + (m % 12) * (y + 1);
+            allProduced += (produced * batch);
         }
         uint256 claimableAmount = allProduced - accounts[account].received;
         return claimableAmount;
