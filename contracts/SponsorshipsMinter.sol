@@ -109,4 +109,14 @@ contract SponsorshipsMinter is CanReclaimToken {
         return true;
     }
 
+   /**
+     * @notice renounce minter role.
+     */
+    function renounceMinterRole()
+        external
+        onlyOwner
+    {
+        sp.renounceMinter();
+    }
+
 }
