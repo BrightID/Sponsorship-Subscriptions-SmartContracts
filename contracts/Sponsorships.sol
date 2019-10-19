@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
-import "./NonTransferAble.sol";
+import "./NonTransferable.sol";
 import "./CanReclaimToken.sol";
 
 
 /**
  * @title Sponsorships contract.
  */
-contract Sponsorships is NonTransferAble, CanReclaimToken {
+contract Sponsorships is NonTransferable, CanReclaimToken {
     string public constant name = "Sponsorships";
     string public constant symbol = "SP";
     uint8 public constant decimals = 0;
