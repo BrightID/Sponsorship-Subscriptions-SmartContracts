@@ -9,7 +9,7 @@ import "./CanReclaimToken.sol";
  */
 contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     string public constant name = "Subscriptions";
-    string public constant symbol = "SUBS";
+    string public constant symbol = "Subs";
     uint8 public constant decimals = 0;
 
     address public spMinterAddr;
