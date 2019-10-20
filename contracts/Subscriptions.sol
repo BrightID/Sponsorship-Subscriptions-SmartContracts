@@ -5,8 +5,8 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title Subscriptions contract.
- */
+* @title Subscriptions contract
+*/
 contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     string public constant name = "Subscriptions";
     string public constant symbol = "Subs";
@@ -26,10 +26,11 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     constructor(uint256 _cap) NonTransferableCapped(_cap) public {}
 
     /**
-     * @notice Mint Subscriptions.
-     * @param account The receiver account.
-     * @param amount number of Subscriptions.
-     */
+    * @notice Mint Subscriptions
+    * @dev Mint Subscriptions token
+    * @param account The receiver account
+    * @param amount The number of Subscriptions
+    */
     function mint(address account, uint256 amount)
         public
         onlyMinter
@@ -44,9 +45,10 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @notice claim Sponsorships.
-     * @param account The account.
-     */
+    * @notice Claim Sponsorships
+    * @dev Claim Sponsorships tokens
+    * @param account The claimer account
+    */
     function claim(address account)
         external
         onlyMinter
@@ -60,9 +62,10 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @notice Count claimable amount
-     * @param account The account.
-     */
+    * @notice Count claimable Sponsorships amount
+    * @dev Count claimable Sponsorships token amount
+    * @param account The claimer account
+    */
     function claimable(address account)
         public
         view
@@ -88,8 +91,8 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST.
-     */
+    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
+    */
     function timestamps(address account)
         external
         view
@@ -99,8 +102,8 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST.
-     */
+    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
+    */
     function received(address account)
         external
         view
@@ -110,8 +113,8 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST.
-     */
+    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
+    */
     function batch(address account, uint256 timestamp)
         external
         view
@@ -121,9 +124,9 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-     * @dev Throws if the number is not bigger than zero.
-     * @param number The number to validate.
-     */
+    * @dev Throws if the number is not bigger than zero
+    * @param number The number to validate
+    */
     modifier onlyPositive(uint number) {
         require(0 < number, INVALID_AMOUNT);
         _;

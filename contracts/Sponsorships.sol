@@ -5,8 +5,8 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title Sponsorships contract.
- */
+* @title Sponsorships contract
+*/
 contract Sponsorships is NonTransferable, CanReclaimToken {
     string public constant name = "Sponsorships";
     string public constant symbol = "Sp";
@@ -26,10 +26,11 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     mapping(bytes32 => uint256) private contextsBalance;
 
     /**
-     * @notice Mint Sponsorships.
-     * @param account The receiver account.
-     * @param amount number of Sponsorships.
-     */
+    * @notice Mint Sponsorships
+    * @dev Mint Sponsorships token
+    * @param account The receiver account
+    * @param amount The number of Sponsorships
+    */
     function mint(address account, uint256 amount)
         public
         onlyMinter
@@ -42,10 +43,11 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-     * @notice Assign some Sponsorships to a context.
-     * @param contextName The context's name.
-     * @param amount number of Sponsorships.
-     */
+    * @notice Assign some Sponsorships to the context
+    * @dev Assign some Sponsorships to the context
+    * @param contextName The context's name
+    * @param amount The number of Sponsorships
+    */
     function assignContext(bytes32 contextName, uint256 amount)
         external
         onlyPositive(amount)
@@ -59,9 +61,10 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of Sponsorships assigned to a context.
-     * @param contextName The context's name.
-     */
+    * @notice Returns the amount of Sponsorships assigned to the context
+    * @dev Returns the context's balance
+    * @param contextName The context's name
+    */
     function totalContextBalance(bytes32 contextName)
         external
         view
@@ -71,10 +74,11 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of Sponsorships assigned by an account to a contextName.
-     * @param account The Sponsorships holder.
-     * @param contextName The context's name.
-     */
+    * @notice Returns the amount of Sponsorships assigned by the account to the contextName
+    * @dev Returns the amount of Sponsorships assigned by the account to the contextName
+    * @param account The assigner address
+    * @param contextName The context's name
+    */
     function contextBalance(address account, bytes32 contextName)
         external
         view
@@ -84,9 +88,10 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-     * @notice Returns the amount of unassigned Sponsorships owned by the account.
-     * @param account The Sponsorships holder.
-     */
+    * @notice Returns the number of unassigned Sponsorships hold by the account
+    * @dev Returns balance of unassigned Sponsorships token
+    * @param account The Sponsorships holder address
+    */
     function unassignedBalance(address account)
         external
         view
@@ -96,9 +101,9 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-     * @dev Throws if the number is not bigger than zero.
-     * @param number The number to validate.
-     */
+    * @dev Throws if the number is not bigger than zero
+    * @param number The number to validate
+    */
     modifier onlyPositive(uint number) {
         require(0 < number, INVALID_AMOUNT);
         _;
