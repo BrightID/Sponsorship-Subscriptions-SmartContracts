@@ -9,8 +9,8 @@ import "./CanReclaimToken.sol";
 
 
 /**
- * @title Subscriptions minter contract.
- */
+* @title Subscriptions minter contract
+*/
 contract SubscriptionsMinter is CanReclaimToken {
     using SafeMath for uint256;
 
@@ -51,8 +51,9 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice Purchase Subscriptions.
-     */
+    * @notice Purchase Subscriptions
+    * @dev Purchase Subscriptions
+    */
     function purchase()
         external
         returns (bool success)
@@ -90,8 +91,9 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice Get current Subscriptions price.
-     */
+    * @notice Retuens Subscriptions price
+    * @dev Retuens Subscriptions price
+    */
     function price()
         external
         view
@@ -105,8 +107,9 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice claim Sponsorships.
-     */
+    * @notice claim Sponsorships
+    * @dev claim Sponsorships tokens
+    */
     function claim()
         external
         returns (bool success)
@@ -118,9 +121,10 @@ contract SubscriptionsMinter is CanReclaimToken {
         return true;
     }
 
-   /**
-     * @notice Disable purchases.
-     */
+    /**
+    * @notice Disable purchases
+    * @dev Renounce minter role
+    */
     function disablePurchases()
         external
         onlyOwner
@@ -128,9 +132,10 @@ contract SubscriptionsMinter is CanReclaimToken {
         subs.renounceMinter();
     }
 
-   /**
-     * @notice Disable claims.
-     */
+    /**
+    * @notice Disable claims
+    * @dev Renounce minter role
+    */
     function disableClaims()
         external
         onlyOwner

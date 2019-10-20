@@ -3,14 +3,13 @@ pragma solidity ^0.5.0;
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Sponsorships.sol";
-import "./Subscriptions.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
 
 
 /**
- * @title Sponsorships minter contract.
- */
+* @title Sponsorships minter contract
+*/
 contract SponsorshipsMinter is CanReclaimToken {
     using SafeMath for uint256;
 
@@ -40,9 +39,10 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice Set purchaseToken address.
-     * @param purchaseTokenAddr Satable token's smart contract address.
-     */
+    * @notice Accept new token as payment token
+    * @dev Set new ERC20 token as payment token
+    * @param purchaseTokenAddr The address of new payment token contract
+    */
     function setPurchaseToken(address purchaseTokenAddr)
         external
         onlyOwner
@@ -54,9 +54,10 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice Set Sponsorship price.
-     * @param _price a Sponsorship is worth how many purchase token.
-     */
+    * @notice Set new price
+    * @dev Set the Sponsorship is worth how many purchase token
+    * @param _price one Sponsorship price
+    */
     function setPrice(uint256 _price)
         external
         onlyOwner
@@ -68,8 +69,9 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-     * @notice purchase Sponsorship.
-     */
+    * @notice Purchase Sponsorship
+    * @dev Purchase Sponsorship token
+    */
     function purchase()
         external
         returns (bool success)
@@ -92,9 +94,10 @@ contract SponsorshipsMinter is CanReclaimToken {
         return false;
     }
 
-   /**
-     * @notice Disable purchases.
-     */
+    /**
+    * @notice Disable purchases
+    * @dev Renounce minter role
+    */
     function disablePurchases()
         external
         onlyOwner
