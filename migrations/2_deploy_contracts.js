@@ -17,10 +17,10 @@ module.exports = function (deployer) {
     await deployer.deploy(Subs, cap);
     const instanceSubs = await Subs.deployed();
 
-    await deployer.deploy(SpMinter, instanceSp.address, instanceSubs.address, purchaseTokenAddr, financeAddr);
+    await deployer.deploy(SpMinter, instanceSp.address, purchaseTokenAddr, financeAddr);
     const instanceSpMinter = await SpMinter.deployed();
 
-    await deployer.deploy(SubsMinter, instanceSubs.address, purchaseTokenAddr, financeAddr);
+    await deployer.deploy(SubsMinter, instanceSp.address, instanceSubs.address, purchaseTokenAddr, financeAddr);
     const instanceSubsMinter = await SubsMinter.deployed();
 
     await instanceSp.addMinter(instanceSpMinter.address);
@@ -28,4 +28,5 @@ module.exports = function (deployer) {
     await instanceSubs.setSpMinter(instanceSpMinter.address);
 
   })
+
 }

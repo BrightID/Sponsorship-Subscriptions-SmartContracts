@@ -15,7 +15,6 @@ contract SponsorshipsMinter is CanReclaimToken {
     using SafeMath for uint256;
 
     Sponsorships internal sp;
-    Subscriptions internal subs;
     ERC20 internal purchaseToken;
 
     uint256 public price;
@@ -30,13 +29,11 @@ contract SponsorshipsMinter is CanReclaimToken {
     event SponsorshipsPurchased(address account, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
-    event SponsorshipsClaimed(address account, uint256 amount);
 
-    constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address spAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
         sp = Sponsorships(spAddr);
-        subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
         price = 10**18;
@@ -93,20 +90,6 @@ contract SponsorshipsMinter is CanReclaimToken {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @notice claim Sponsorships.
-     */
-    function claim()
-        external
-        returns (bool success)
-    {
-        uint256 claimableAmount = subs.claim(msg.sender);
-        emit SponsorshipsClaimed(msg.sender, claimableAmount);
-        require(sp.mint(msg.sender, claimableAmount), MINT_ERROR);
-
-        return true;
     }
 
    /**

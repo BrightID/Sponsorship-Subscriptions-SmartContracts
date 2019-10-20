@@ -15,6 +15,7 @@ contract SubscriptionsMinter is CanReclaimToken {
     using SafeMath for uint256;
 
     Subscriptions internal subs;
+    Sponsorships internal sp;
     ERC20 internal purchaseToken;
 
     uint256 public cap;
@@ -33,6 +34,7 @@ contract SubscriptionsMinter is CanReclaimToken {
     mapping(uint8 => Step) private steps;
 
     event SubscriptionsPurchased(address account, uint256 price);
+    event SponsorshipsClaimed(address account, uint256 amount);
 
     constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
         public
@@ -102,6 +104,20 @@ contract SubscriptionsMinter is CanReclaimToken {
         return steps[1].price;
     }
 
+    /**
+     * @notice claim Sponsorships.
+     */
+    function claim()
+        external
+        returns (bool success)
+    {
+        uint256 claimableAmount = subs.claim(msg.sender);
+        emit SponsorshipsClaimed(msg.sender, claimableAmount);
+        require(sp.mint(msg.sender, claimableAmount), MINT_ERROR);
+
+        return true;
+    }
+
    /**
      * @notice Disable purchases.
      */
@@ -111,7 +127,7 @@ contract SubscriptionsMinter is CanReclaimToken {
     {
         subs.renounceMinter();
     }
-    
+
    /**
      * @notice Disable claims.
      */

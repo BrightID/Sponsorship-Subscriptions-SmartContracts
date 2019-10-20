@@ -12,12 +12,8 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     string public constant symbol = "Subs";
     uint8 public constant decimals = 0;
 
-    address public spMinterAddr;
-
     string private constant ALL_SPONSORSHIPS_CLAIMED = "All Sponsorships claimed";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
-    string private constant ONLY_SPMINTER = "Caller is not the SponsorshipsMinter";
-    string private constant ZERO_ADDRESS = "SponsorshipsMinter is the zero address";
 
     struct Account {
         uint256 received;
@@ -28,19 +24,6 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     mapping(address => Account) private accounts;
 
     constructor(uint256 _cap) NonTransferableCapped(_cap) public {}
-
-    /**
-     * @notice Set SponsorshipsMinter address.
-     * @param _spMinterAddr SponsorshipsMinter's smart contract address.
-     */
-    function setSpMinter(address _spMinterAddr)
-        external
-        onlyOwner
-    {
-        require(_spMinterAddr != address(0), ZERO_ADDRESS);
-
-        spMinterAddr = _spMinterAddr;
-    }
 
     /**
      * @notice Mint Subscriptions.
@@ -66,7 +49,7 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
      */
     function claim(address account)
         external
-        onlySpMinter
+        onlyMinter
         returns (uint256 amount)
     {
         uint256 claimableAmount = claimable(account);
@@ -146,11 +129,4 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
         _;
     }
 
-    /**
-     * @dev Throws if the caller is not SponsorshipsMinter contract.
-     */
-    modifier onlySpMinter() {
-        require(msg.sender == spMinterAddr, ONLY_SPMINTER);
-        _;
-    }
 }
