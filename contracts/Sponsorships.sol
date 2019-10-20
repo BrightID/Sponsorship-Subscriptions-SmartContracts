@@ -9,7 +9,7 @@ import "./CanReclaimToken.sol";
  */
 contract Sponsorships is NonTransferable, CanReclaimToken {
     string public constant name = "Sponsorships";
-    string public constant symbol = "SP";
+    string public constant symbol = "Sp";
     uint8 public constant decimals = 0;
 
     string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
