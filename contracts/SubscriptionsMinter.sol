@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./Sponsorships.sol";
 import "./Subscriptions.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
@@ -33,13 +34,14 @@ contract SubscriptionsMinter is CanReclaimToken {
 
     event SubscriptionsPurchased(address account, uint256 price);
 
-    constructor(address subsAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
         steps[0].border = 400000;
         steps[0].price = 10**18;
         steps[1].border = 900000;
         steps[1].price = 2 * 10**18;
+        sp = Sponsorships(spAddr);
         subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
@@ -108,6 +110,16 @@ contract SubscriptionsMinter is CanReclaimToken {
         onlyOwner
     {
         subs.renounceMinter();
+    }
+    
+   /**
+     * @notice Disable claims.
+     */
+    function disableClaims()
+        external
+        onlyOwner
+    {
+        sp.renounceMinter();
     }
 
 }
