@@ -6,7 +6,6 @@ import "./Finance.sol";
 
 
 contract CanReclaimToken is Ownable {
-
     Finance public finance;
     ERC20 internal token;
 
@@ -19,9 +18,10 @@ contract CanReclaimToken is Ownable {
     event FinanceSet(address financeAddr);
 
     /**
-     * @notice Set financeAddr as DAO finance.
-     * @param financeAddr The DAO finance's address.
-     */
+    * @notice Set new DAO to deposite revenues
+    * @dev Set DAO's finance address to deposit for approved ERC20 tokens or ETH
+    * @param financeAddr Address of DAO's finance
+    */
     function setFinance(address financeAddr)
         external
         onlyOwner
@@ -33,9 +33,10 @@ contract CanReclaimToken is Ownable {
     }
 
     /**
-     * @dev Reclaim all ERC20 tokens
-     * @param tokenAddr The address of the token contract
-     */
+    * @notice Reclaim the tokens which sent to the smart contract
+    * @dev Reclaim all ERC20 tokens which sent to the smart contract
+    * @param tokenAddr The address of the token contract
+    */
     function reclaimTokens(address tokenAddr)
         external
         onlyOwner
@@ -53,9 +54,10 @@ contract CanReclaimToken is Ownable {
     }
 
     /**
-     * @notice Check an address is a contract or not
-     * @param addr The address that should check
-     */
+    * @notice Check an address belongs to the smart contract
+    * @dev Check an address belongs to the smart contract
+    * @param addr The Ethereum address
+    */
     function isContract(address addr)
         internal
         view
