@@ -25,7 +25,7 @@ module.exports = function (deployer) {
 
     await instanceSp.addMinter(instanceSpMinter.address);
     await instanceSubs.addMinter(instanceSubsMinter.address);
-    await instanceSubs.setSpMinter(instanceSpMinter.address);
+    await instanceSp.addMinter(instanceSubsMinter.address);
 
   })
 
