@@ -110,9 +110,9 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
    /**
-     * @notice renounce minter role.
+     * @notice Disable purchases.
      */
-    function renounceMinterRole()
+    function disablePurchases()
         external
         onlyOwner
     {
