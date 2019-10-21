@@ -91,39 +91,6 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
-    */
-    function timestamps(address account)
-        external
-        view
-        returns (uint256[] memory)
-    {
-        return accounts[account].timestamps;
-    }
-
-    /**
-    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
-    */
-    function received(address account)
-        external
-        view
-        returns (uint256)
-    {
-        return accounts[account].received;
-    }
-
-    /**
-    * @dev ONLY FOR TEST STEP. I SHOULD REMOVE IT AFTER TEST
-    */
-    function batch(address account, uint256 timestamp)
-        external
-        view
-        returns (uint256)
-    {
-        return accounts[account].batches[timestamp];
-    }
-
-    /**
     * @dev Throws if the number is not bigger than zero
     * @param number The number to validate
     */
