@@ -51,8 +51,8 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Purchase Subscriptions
-    * @dev Purchase Subscriptions
+    * @notice Purchase Subscriptions.
+    * @dev Purchase Subscriptions.
     */
     function purchase()
         external
@@ -91,8 +91,8 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Retuens Subscriptions price
-    * @dev Retuens Subscriptions price
+    * @notice Show current price of one subscription.
+    * @dev Returns Subscriptions price.
     */
     function price()
         external
@@ -123,7 +123,7 @@ contract SubscriptionsMinter is CanReclaimToken {
 
     /**
     * @notice Disable purchases
-    * @dev Renounce minter role
+    * @dev Renounce minter
     */
     function disablePurchases()
         external
@@ -134,7 +134,7 @@ contract SubscriptionsMinter is CanReclaimToken {
 
     /**
     * @notice Disable claims
-    * @dev Renounce minter role
+    * @dev Renounce minter
     */
     function disableClaims()
         external
