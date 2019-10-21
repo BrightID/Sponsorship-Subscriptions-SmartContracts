@@ -95,8 +95,8 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Disable purchases
-    * @dev Renounce minter role
+    * @notice Disable purchases.
+    * @dev Renounce minter.
     */
     function disablePurchases()
         external
