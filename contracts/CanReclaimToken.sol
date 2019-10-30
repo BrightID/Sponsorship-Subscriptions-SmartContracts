@@ -2,10 +2,11 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Finance.sol";
 
-
 contract CanReclaimToken is Ownable {
+    using Address for address;
     Finance public finance;
     ERC20 internal token;
 
@@ -26,7 +27,7 @@ contract CanReclaimToken is Ownable {
         external
         onlyOwner
     {
-        require(isContract(financeAddr), IS_NOT_CONTRACT);
+        require(financeAddr.isContract(), IS_NOT_CONTRACT);
 
         finance = Finance(financeAddr);
         emit FinanceSet(financeAddr);
@@ -41,7 +42,7 @@ contract CanReclaimToken is Ownable {
         external
         onlyOwner
     {
-        require(isContract(tokenAddr), IS_NOT_CONTRACT);
+        require(tokenAddr.isContract(), IS_NOT_CONTRACT);
 
         token = ERC20(tokenAddr);
         uint256 balance = token.balanceOf(address(this));
@@ -51,26 +52,6 @@ contract CanReclaimToken is Ownable {
 
         finance.deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
         emit ClaimedTokens(tokenAddr, balance);
-    }
-
-    /**
-    * @notice Check an address belongs to the smart contract
-    * @dev Check an address belongs to the smart contract
-    * @param addr The Ethereum address
-    */
-    function isContract(address addr)
-        internal
-        view
-        returns (bool)
-    {
-        uint size;
-        if (addr == address(0)) {
-            return false;
-        }
-        assembly {
-            size := extcodesize(addr)
-        }
-        return size > 0;
     }
 
 }

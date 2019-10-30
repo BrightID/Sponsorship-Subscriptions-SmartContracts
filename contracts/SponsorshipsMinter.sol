@@ -2,6 +2,7 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Sponsorships.sol";
 import "./Finance.sol";
 import "./CanReclaimToken.sol";
@@ -12,6 +13,7 @@ import "./CanReclaimToken.sol";
 */
 contract SponsorshipsMinter is CanReclaimToken {
     using SafeMath for uint256;
+    using Address for address;
 
     Sponsorships internal sp;
     ERC20 internal purchaseToken;
@@ -47,7 +49,7 @@ contract SponsorshipsMinter is CanReclaimToken {
         external
         onlyOwner
     {
-        require(isContract(purchaseTokenAddr), IS_NOT_CONTRACT);
+        require(purchaseTokenAddr.isContract(), IS_NOT_CONTRACT);
 
         purchaseToken = ERC20(purchaseTokenAddr);
         emit PurchaseTokenSet(purchaseTokenAddr);
