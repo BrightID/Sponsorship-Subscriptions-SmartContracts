@@ -5,7 +5,7 @@ import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
 
 /**
  * @dev Copied from https://github.com/BrightID/Sponsorship-Subscriptions-SmartContracts/blob/master/node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol
- * omitting parts related to transfering or burning tokens.
+ * omitting parts related to transferring or burning tokens.
  */
 contract NonTransferable is MinterRole {
     using SafeMath for uint256;
