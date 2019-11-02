@@ -27,8 +27,8 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
 
     /**
     * @notice Mint Sponsorships.
-    * @dev Mint Sponsorship tokens.
-    * @param account The receiver account.
+    * @dev Mint Sponsorships.
+    * @param account The receiver's account.
     * @param amount The number of Sponsorships.
     */
     function mint(address account, uint256 amount)
@@ -44,8 +44,8 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @notice Assign some Sponsorships to the context.
-    * @dev Assign some Sponsorships to the context.
+    * @notice Assign Sponsorships to the context.
+    * @dev Assign Sponsorships to the context.
     * @param contextName The context's name.
     * @param amount The number of Sponsorships.
     */
@@ -64,6 +64,7 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
 
     /**
     * @notice Returns the number of Sponsorships assigned to the context.
+    * @dev Returns the number of Sponsorships assigned to the context.
     * @param contextName The context's name.
     */
     function totalContextBalance(bytes32 contextName)
@@ -102,8 +103,8 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @dev Throws if the number is not bigger than zero
-    * @param number The number to validate
+    * @dev Throws if the number is not bigger than zero.
+    * @param number The number to validate.
     */
     modifier onlyPositive(uint number) {
         require(0 < number, INVALID_AMOUNT);
