@@ -27,6 +27,9 @@ module.exports = function (deployer) {
     await instanceSubs.addMinter(instanceSubsMinter.address);
     await instanceSp.addMinter(instanceSubsMinter.address);
 
+    await instanceSp.setFinance(financeAddr);
+    await instanceSubs.setFinance(financeAddr);
+
   })
 
 }
