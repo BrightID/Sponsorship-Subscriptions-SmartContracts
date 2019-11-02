@@ -34,6 +34,7 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     function mint(address account, uint256 amount)
         public
         onlyMinter
+        whenNotPaused
         onlyPositive(amount)
         returns (bool)
     {
@@ -52,6 +53,7 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     function claim(address account)
         external
         onlyMinter
+        whenNotPaused
         returns (uint256 amount)
     {
         uint256 claimableAmount = claimable(account);

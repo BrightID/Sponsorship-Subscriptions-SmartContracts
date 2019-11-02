@@ -2,12 +2,14 @@ pragma solidity ^0.5.0;
 
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
+import "/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+
 
 /**
  * @dev Copied from https://github.com/BrightID/Sponsorship-Subscriptions-SmartContracts/blob/master/node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol
  * omitting parts related to transferring or burning tokens.
  */
-contract NonTransferable is MinterRole {
+contract NonTransferable is MinterRole, Pausable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;

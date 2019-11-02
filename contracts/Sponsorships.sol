@@ -34,6 +34,7 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     function mint(address account, uint256 amount)
         public
         onlyMinter
+        whenNotPaused
         onlyPositive(amount)
         returns (bool)
     {
@@ -50,6 +51,7 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     */
     function assignContext(bytes32 contextName, uint256 amount)
         external
+        whenNotPaused
         onlyPositive(amount)
     {
         require(amount <= accounts[msg.sender].unassigned, INSUFFICIENT_UNASSIGNED);
