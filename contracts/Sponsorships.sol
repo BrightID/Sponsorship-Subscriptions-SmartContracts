@@ -26,10 +26,10 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     mapping(bytes32 => uint256) private contextsBalance;
 
     /**
-    * @notice Mint Sponsorships
-    * @dev Mint Sponsorships token
-    * @param account The receiver account
-    * @param amount The number of Sponsorships
+    * @notice Mint Sponsorships.
+    * @dev Mint Sponsorship tokens.
+    * @param account The receiver account.
+    * @param amount The number of Sponsorships.
     */
     function mint(address account, uint256 amount)
         public
@@ -43,10 +43,10 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @notice Assign some Sponsorships to the context
-    * @dev Assign some Sponsorships to the context
-    * @param contextName The context's name
-    * @param amount The number of Sponsorships
+    * @notice Assign some Sponsorships to the context.
+    * @dev Assign some Sponsorships to the context.
+    * @param contextName The context's name.
+    * @param amount The number of Sponsorships.
     */
     function assignContext(bytes32 contextName, uint256 amount)
         external
@@ -61,9 +61,8 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @notice Returns the amount of Sponsorships assigned to the context
-    * @dev Returns the context's balance
-    * @param contextName The context's name
+    * @notice Returns the number of Sponsorships assigned to the context.
+    * @param contextName The context's name.
     */
     function totalContextBalance(bytes32 contextName)
         external
@@ -74,10 +73,10 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @notice Returns the amount of Sponsorships assigned by the account to the contextName
-    * @dev Returns the amount of Sponsorships assigned by the account to the contextName
-    * @param account The assigner address
-    * @param contextName The context's name
+    * @notice Returns the number of Sponsorships assigned by the account to the context.
+    * @dev Returns the number of Sponsorships assigned by the account to the context.
+    * @param account The assigner's address.
+    * @param contextName The context's name.
     */
     function contextBalance(address account, bytes32 contextName)
         external
@@ -88,9 +87,9 @@ contract Sponsorships is NonTransferable, CanReclaimToken {
     }
 
     /**
-    * @notice Returns the number of unassigned Sponsorships hold by the account
-    * @dev Returns balance of unassigned Sponsorships token
-    * @param account The Sponsorships holder address
+    * @notice Returns the number of unassigned Sponsorships held by the account.
+    * @dev Returns the number of unassigned Sponsorships held by the account.
+    * @param account The Sponsorship holder's address.
     */
     function unassignedBalance(address account)
         external

@@ -19,9 +19,8 @@ contract CanReclaimToken is Ownable {
     event FinanceSet(address financeAddr);
 
     /**
-    * @notice Set new DAO to deposite revenues
-    * @dev Set DAO's finance address to deposit for approved ERC20 tokens or ETH
-    * @param financeAddr Address of DAO's finance
+    * @notice Set the DAO finance app address where reclaimed tokens will go.
+    * @param financeAddr Address of a DAO's finance app with a deposit() function.
     */
     function setFinance(address financeAddr)
         external
@@ -34,9 +33,10 @@ contract CanReclaimToken is Ownable {
     }
 
     /**
-    * @notice Reclaim the tokens which sent to the smart contract
-    * @dev Reclaim all ERC20 tokens which sent to the smart contract
-    * @param tokenAddr The address of the token contract
+    * @notice Reclaim tokens of the specified type sent to the smart contract.
+    * @dev Reclaim the specified type of ERC20 tokens sent to the smart contract.
+    * Tokens will be deposited using the deposit() function of the finance app set on this contract with setFinance(). 
+    * @param tokenAddr The address of the token contract.
     */
     function reclaimTokens(address tokenAddr)
         external

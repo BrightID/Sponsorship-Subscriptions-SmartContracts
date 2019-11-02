@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 /**
  * @title Finance interface.
+ * @dev Copied from https://github.com/aragon/aragon-apps/blob/master/apps/finance/contracts/Finance.sol#L198 .
  */
 contract Finance {
 
