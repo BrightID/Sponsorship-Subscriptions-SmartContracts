@@ -4,13 +4,15 @@
 // Subscriptions, SponsorshipsMinter, and SubscriptionsMinter contracts.
 // Look for the "onlyOwner" modifier on contract functions.
 
-// The executor acquires a permanent ability to mint both Sponsorships
-// and Subscriptions to any address, and to claim Sponsorships from 
-// Subscriptions held by any address. Look for the "onlyMinter" modifier.
+// The executor acquires the permanent ability to mint both Sponsorships
+// and Subscriptions to any address, and to mark Sponsorships from 
+// Subscriptions claimed (without actually minting them) for any address
+// by calling Subscriptions.claim() directly. Look for the "onlyMinter"
+// modifier on contract functions.
 
-// The executor acquires a permanent ability to pause mint and claim
+// The executor acquires the permanent ability to pause mint and claim
 // functions for Subscriptions and mint and assignContext functions for
-// Sponsorships. Look for the "whenNotPaused" modifier.
+// Sponsorships. Look for the "whenNotPaused" modifier on contract functions.
 
 var Sp = artifacts.require('Sponsorships.sol');
 var SpMinter = artifacts.require('SponsorshipsMinter.sol');
