@@ -20,12 +20,12 @@ contract SponsorshipsMinter is CanReclaimToken {
 
     uint256 public price;
 
-    string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
-    string private constant APPROVE_ERROR = "Approve error";
-    string private constant MINT_ERROR = "Mint error";
-    string private constant FINANCE_MESSAGE = "Revenue of Sponsorships Sale";
-    string private constant INVALID_PRICE = "Price must be greater than zero";
-    string private constant IS_NOT_CONTRACT = "It is not a contract's address";
+    string private constant INSUFFICIENT_PAYMENT = "Insufficient payment.";
+    string private constant APPROVE_ERROR = "Approve error.";
+    string private constant MINT_ERROR = "Mint error.";
+    string private constant FINANCE_MESSAGE = "Revenue of Sponsorships sale.";
+    string private constant INVALID_PRICE = "Price must be greater than zero.";
+    string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
 
     event SponsorshipsPurchased(address account, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
