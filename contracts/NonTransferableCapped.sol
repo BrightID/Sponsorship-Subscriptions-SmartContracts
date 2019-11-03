@@ -4,6 +4,7 @@ import "./NonTransferable.sol";
 
 /**
  * @dev Extension of `NonTransferable` that adds a cap to the supply of tokens.
+ * Copied from https://github.com/BrightID/Sponsorship-Subscriptions-SmartContracts/blob/master/node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol .
  */
 contract NonTransferableCapped is NonTransferable {
     uint256 private _cap;
