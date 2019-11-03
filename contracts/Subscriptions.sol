@@ -95,7 +95,7 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
                 months = 72;
             }
             uint256 years = months / 12;
-            // One subscription produces 252 Sponsorships in total.
+            // One Subscription produces 252 Sponsorships in total.
             uint256 producedPerSub = 6 * years * (years + 1) + (months % 12) * (years + 1);
             allProduced += (producedPerSub * subsInBatch);
         }
