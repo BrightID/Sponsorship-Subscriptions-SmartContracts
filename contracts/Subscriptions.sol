@@ -17,7 +17,9 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
 
     struct Account {
         uint256 received;
+        // Array to keep track of timestamps for the batches.
         uint256[] timestamps;
+        // Batches mapped from timestamps to amounts.
         mapping (uint256 => uint256) batches;
     }
 
@@ -26,10 +28,10 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     constructor(uint256 _cap) NonTransferableCapped(_cap) public {}
 
     /**
-    * @notice Mint Subscriptions
-    * @dev Mint Subscriptions token
-    * @param account The receiver account
-    * @param amount The number of Subscriptions
+    * @notice Mint Subscriptions.
+    * @dev Mint Subscriptions.
+    * @param account The receiver's account address.
+    * @param amount The number of Subscriptions.
     */
     function mint(address account, uint256 amount)
         public
@@ -46,9 +48,12 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-    * @notice Claim Sponsorships
-    * @dev Claim Sponsorships tokens
-    * @param account The claimer account
+    * @notice Tells the minter how many Sponsorships the account holder can claim.
+    * @dev Tells the minter how many Sponsorships the account holder can claim so it can
+    * then mint them. Also increments the account's "received" counter to indicate the  
+    * number of Sponsorships that have been claimed.
+    * @param account The claimer's account address.
+    * @return The number of Sponsorships the account holder can claim.
     */
     function claim(address account)
         external
@@ -64,29 +69,35 @@ contract Subscriptions is NonTransferableCapped, CanReclaimToken {
     }
 
     /**
-    * @notice Count claimable Sponsorships amount
-    * @dev Count claimable Sponsorships token amount
-    * @param account The claimer account
+    * @notice Computes the number of Sponsorships the account holder can claim.
+    * @dev Computes the number of Sponsorships the account holder can claim.
+    * @param account The claimer's account address.
+    * @return The number of Sponsorships the account holder can claim.
     */
     function claimable(address account)
         public
         view
         returns (uint256 amount)
     {
+        // The number of Sponsorships produced by all of this account's batches.
         uint256 allProduced;
 
+        // Loop through all the batches.
         for (uint i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
-            uint256 batch = accounts[account].batches[timestamp];
-            // Start with one claimable sponsorship immediately.
-            uint256 m = ((now - timestamp) / (30*24*3600)) + 1;
-            // Subscriptions end after 252 sponsorships (a little less than 6 years).
-            if (72 < m) {
-                m = 72;
+            // The number of Subscriptions purchased in the batch that matches the timestamp.
+            uint256 subsInBatch = accounts[account].batches[timestamp];
+            // "months" is the number of whole 30-day periods since the batch was purchased (plus one).
+            // We add one because we want each Subscription to start with one claimable sponsorship immediately.
+            uint256 months = ((now - timestamp) / (30*24*3600)) + 1;
+            // Subscriptions end after 71 30-day periods (a little less than 6 years).
+            if (72 < months) {
+                months = 72;
             }
-            uint256 y = m / 12;
-            uint256 produced = 6 * y * (y + 1) + (m % 12) * (y + 1);
-            allProduced += (produced * batch);
+            uint256 years = months / 12;
+            // One subscription produces 252 Sponsorships in total.
+            uint256 producedPerSub = 6 * years * (years + 1) + (months % 12) * (years + 1);
+            allProduced += (producedPerSub * subsInBatch);
         }
         uint256 claimableAmount = allProduced - accounts[account].received;
         return claimableAmount;
