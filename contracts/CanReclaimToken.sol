@@ -10,10 +10,10 @@ contract CanReclaimToken is Ownable {
     Finance public finance;
     ERC20 internal token;
 
-    string private constant APPROVE_ERROR = "Approve error";
-    string private constant RECLAIM_MESSAGE = "Reclaim tokens";
-    string private constant IS_NOT_CONTRACT = "It is not a contract's address";
-    string private constant ZERO_BALANCE = "There is no coin";
+    string private constant APPROVE_ERROR = "Approve error.";
+    string private constant RECLAIM_MESSAGE = "Reclaiming tokens sent by mistake.";
+    string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
+    string private constant ZERO_BALANCE = "There are no tokens of this type to be reclaimed.";
 
     event ClaimedTokens(address tokenAddr, uint256 amount);
     event FinanceSet(address financeAddr);
