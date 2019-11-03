@@ -15,7 +15,7 @@
 // function (inherited from CanReclaimToken) on the Sponsorships,
 // Subscriptions, SponsorshipsMinter, and SubscriptionsMinter contracts.
 // This will change the recipient of reclaimed tokens; for the two minter
-// contracts, it will also change the recipient of purchases.
+// contracts, it will also change the recipient of funds from purchases.
 
 // The executor acquires the permanent ability to mint both Sponsorships
 // and Subscriptions to any address, and to mark Sponsorships from 
