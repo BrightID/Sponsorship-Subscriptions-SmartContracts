@@ -5,14 +5,21 @@
 // because they inherit from CanReclaimToken which inherits from Ownable.
 // This gives the executor the ability to reclaim any tokens erroneously
 // sent to those contracts by calling CanReclaimToken.reclaimTokens().
+
 // The ownership role also allows the executor to change the token and
 // price used to purchase Sponsorships and detach the minters from the
 // Sponsorships and Subscriptions contracts for replacement. Look for the 
 // "onlyOwner" modifier on contract functions.
 
+// The ownership role also allows the executor to to call the setFinance()
+// function (inherited from CanReclaimToken) on the Sponsorships,
+// Subscriptions, SponsorshipsMinter, and SubscriptionsMinter contracts.
+// This will change the recipient of reclaimed tokens; for the two minter
+// contracts, it will also change the recipient of purchases.
+
 // The executor acquires the permanent ability to mint both Sponsorships
-// and Subscriptions to any address, and to mark available Sponsorships from 
-// Subscriptions claimed (without actually minting them) for any address
+// and Subscriptions to any address, and to mark Sponsorships from 
+// Subscriptions as claimed (without actually minting them) for any address
 // by calling Subscriptions.claim() directly. Look for the "onlyMinter"
 // modifier on contract functions.
 
