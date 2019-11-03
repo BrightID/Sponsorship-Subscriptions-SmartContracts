@@ -37,13 +37,14 @@ contract SponsorshipsMinter is CanReclaimToken {
         sp = Sponsorships(spAddr);
         finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
+        // The initial price is one.
         price = 10**18;
     }
 
     /**
-    * @notice Accept new token as payment token
-    * @dev Set new ERC20 token as payment token
-    * @param purchaseTokenAddr The address of new payment token contract
+    * @notice Set the ERC20 token used as payment for Sponsorships.
+    * @dev Set the ERC20 token used as payment for Sponsorships.
+    * @param purchaseTokenAddr The address of the smart contract of the token used for payments.
     */
     function setPurchaseToken(address purchaseTokenAddr)
         external
@@ -56,9 +57,9 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Set new price
-    * @dev Set the Sponsorship is worth how many purchase token
-    * @param _price one Sponsorship price
+    * @notice Set the price per Sponsorship.
+    * @dev Set the price per Sponsorship.
+    * @param _price price per Sponsorship.
     */
     function setPrice(uint256 _price)
         external
@@ -71,8 +72,8 @@ contract SponsorshipsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Purchase Sponsorship
-    * @dev Purchase Sponsorship token
+    * @notice Purchase Sponsorships.
+    * @dev Purchase Sponsorships.
     */
     function purchase()
         external
