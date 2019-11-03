@@ -26,11 +26,15 @@ contract SubscriptionsMinter is CanReclaimToken {
     string private constant FINANCE_MESSAGE = "Revenue of Subscriptions sale";
     string private constant CAP_EXCEEDED = "Cap exceeded";
 
+    // The price of Subscriptions is a step function of the number of Subscriptions
+    // already sold.
+
     struct Step {
         uint256 border;
         uint256 price;
     }
 
+    // Each step of the price function is numbered, starting from zero.
     mapping(uint8 => Step) private steps;
 
     event SubscriptionsPurchased(address account, uint256 price);
@@ -39,10 +43,12 @@ contract SubscriptionsMinter is CanReclaimToken {
     constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
         public
     {
+        // Define the steps for the price of Subscriptions.
         steps[0].border = 400000;
         steps[0].price = 10**18;
         steps[1].border = 900000;
         steps[1].price = 2 * 10**18;
+        
         sp = Sponsorships(spAddr);
         subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
@@ -74,6 +80,8 @@ contract SubscriptionsMinter is CanReclaimToken {
 
         uint256 availableSubs = steps[stepNumber].border - totalSupply;
         uint256 subsAmount = allowance.div(price);
+        // Only sell the Subscriptions left in the current step. If the user wants to buy
+        // more Subscriptions from the next step, they will have to make another purchase.
         if (availableSubs < subsAmount) {
             subsAmount = availableSubs;
         }
@@ -91,8 +99,8 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice Show current price of one subscription.
-    * @dev Returns Subscriptions price.
+    * @notice Show the current price of one Subscription.
+    * @dev Show the current price of one Subscription.
     */
     function price()
         external
@@ -107,15 +115,21 @@ contract SubscriptionsMinter is CanReclaimToken {
     }
 
     /**
-    * @notice claim Sponsorships
-    * @dev claim Sponsorships tokens
+    * @notice claim Sponsorships.
+    * @dev claim Sponsorships.
     */
     function claim()
         external
         returns (bool success)
     {
+        // First, get the number of Sponsorships to mint from the Subscriptions contract.
+        // This will increment a "received" counter for the account. After this is done,
+        // the Subscriptions contract will consider these Sponsorships to actually have
+        // been received.
         uint256 claimableAmount = subs.claim(msg.sender);
         emit SponsorshipsClaimed(msg.sender, claimableAmount);
+        // Next tell the Sponsorships contract to actually mint the correct number of
+        // Sponsorships into the claimer's account address.
         require(sp.mint(msg.sender, claimableAmount), MINT_ERROR);
 
         return true;
