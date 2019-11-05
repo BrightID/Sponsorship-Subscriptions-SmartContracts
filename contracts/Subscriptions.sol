@@ -94,9 +94,9 @@ contract Subscriptions is NonTransferableCapped, FinanceManager {
             if (72 < months) {
                 months = 72;
             }
-            uint256 year = months / 12;
+            uint256 _years = months / 12;
             // One Subscription produces 252 Sponsorships in total.
-            uint256 producedPerSub = 6 * year * (year + 1) + (months % 12) * (year + 1);
+            uint256 producedPerSub = 6 * _years * (_years + 1) + (months % 12) * (_years + 1);
             allProduced += (producedPerSub * subsInBatch);
         }
         uint256 claimableAmount = allProduced - accounts[account].received;
