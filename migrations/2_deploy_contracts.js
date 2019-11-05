@@ -2,23 +2,23 @@
 
 // The executor acquires "ownership" roles over the Sponsorships,
 // Subscriptions, SponsorshipsMinter, and SubscriptionsMinter contracts
-// because they inherit from CanReclaimToken which inherits from Ownable.
+// because they inherit from FinanceManager which inherits from Ownable.
 // This gives the executor the ability to reclaim any tokens erroneously
-// sent to those contracts by calling CanReclaimToken.reclaimTokens().
+// sent to those contracts by calling FinanceManager.reclaimTokens().
 
 // The ownership role also allows the executor to change the token and
 // price used to purchase Sponsorships and detach the minters from the
-// Sponsorships and Subscriptions contracts for replacement. Look for the 
+// Sponsorships and Subscriptions contracts for replacement. Look for the
 // "onlyOwner" modifier on contract functions.
 
 // The ownership role also allows the executor to to call the setFinance()
-// function (inherited from CanReclaimToken) on the Sponsorships,
+// function (inherited from FinanceManager) on the Sponsorships,
 // Subscriptions, SponsorshipsMinter, and SubscriptionsMinter contracts.
 // This will change the recipient of reclaimed tokens; for the two minter
 // contracts, it will also change the recipient of funds from purchases.
 
 // The executor acquires the permanent ability to mint both Sponsorships
-// and Subscriptions to any address, and to mark Sponsorships from 
+// and Subscriptions to any address, and to mark Sponsorships from
 // Subscriptions as claimed (without actually minting them) for any address
 // by calling Subscriptions.claim() directly. Look for the "onlyMinter"
 // modifier on contract functions.
@@ -33,14 +33,16 @@ var SpMinter = artifacts.require('SponsorshipsMinter.sol');
 var Subs = artifacts.require('Subscriptions.sol');
 var SubsMinter = artifacts.require('SubscriptionsMinter.sol');
 
-// This needs to match the total number of Subscriptions in all 
+// This needs to match the total number of Subscriptions in all
 // steps defined in the SubscriptionsMinter contract.
 const cap = 900000;
 // The contract address of the Finance app of BMAIN DAO.
-const financeAddr = '';
+const financeAddr = '0x0e224992f495860e555e8312143e09663d657f2b';
 // The purchase token needs to be DAI or an equivalent. Several places define
 // a starting or base price of "1."
-const purchaseTokenAddr = '';
+const purchaseTokenAddr = '0xDD3a0A73Ff48180f248B953ea7715dAEF35fe812';
+// purchaseTokenAddr = '0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359'; //mainnet
+
 
 module.exports = function (deployer) {
   deployer.then(async () => {
