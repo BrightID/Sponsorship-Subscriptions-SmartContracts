@@ -18,7 +18,7 @@ contract FinanceManager is Ownable {
     event FinanceSet(address financeAddr);
 
     /**
-    * @notice Set the DAO finance app address where reclaimed tokens will go.
+    * @notice Set the DAO finance app address where deposited or reclaimed tokens will go.
     * @param financeAddr Address of a DAO's finance app with a deposit() function.
     */
     function setFinance(address financeAddr)
@@ -34,8 +34,8 @@ contract FinanceManager is Ownable {
     /**
     * @notice Reclaim tokens of the specified type sent to the smart contract.
     * @dev Reclaim the specified type of ERC20 tokens sent to the smart contract.
-    * Tokens will be deposited using the deposit() function of the finance app set on this contract with setFinance(). 
-    * @param tokenAddr The address of the token contract.
+    * Tokens will be deposited into the finance app set with setFinance(). 
+    * @param tokenAddr Address of the token contract.
     */
     function reclaimTokens(address tokenAddr)
         external
@@ -52,11 +52,12 @@ contract FinanceManager is Ownable {
     }
 
     /**
-    * @notice Deposit tokens of the specified type in the DAO.
-    * @dev Deposit the specified type of ERC20 tokens in the DAO.
-    * @param tokenAddr The address of the token contract.
-    * @param amount Amount of tokens sent.
-    * @param _reference Reason for payment.
+    * @notice Deposit tokens of the specified type.
+    * @dev Deposit the specified type of ERC20 tokens using the finance app set
+    * with setFinance().
+    * @param tokenAddr Address of the token contract.
+    * @param amount Number of tokens to deposit.
+    * @param _reference Reason for the deposit.
     */
     function deposit(address tokenAddr, uint256 amount, string memory _reference)
         internal
