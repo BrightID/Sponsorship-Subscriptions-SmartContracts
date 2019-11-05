@@ -5,13 +5,13 @@ import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Sponsorships.sol";
 import "./Finance.sol";
-import "./CanReclaimToken.sol";
+import "./FinanceManager.sol";
 
 
 /**
 * @title Sponsorships minter contract
 */
-contract SponsorshipsMinter is CanReclaimToken {
+contract SponsorshipsMinter is FinanceManager {
     using SafeMath for uint256;
     using Address for address;
 

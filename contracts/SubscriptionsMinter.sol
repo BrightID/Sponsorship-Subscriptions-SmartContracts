@@ -5,13 +5,13 @@ import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Sponsorships.sol";
 import "./Subscriptions.sol";
 import "./Finance.sol";
-import "./CanReclaimToken.sol";
+import "./FinanceManager.sol";
 
 
 /**
 * @title Subscriptions minter contract
 */
-contract SubscriptionsMinter is CanReclaimToken {
+contract SubscriptionsMinter is FinanceManager {
     using SafeMath for uint256;
 
     Subscriptions internal subs;

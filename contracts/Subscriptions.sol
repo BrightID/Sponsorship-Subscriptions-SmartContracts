@@ -1,13 +1,13 @@
 pragma solidity ^0.5.0;
 
 import "./NonTransferableCapped.sol";
-import "./CanReclaimToken.sol";
+import "./FinanceManager.sol";
 
 
 /**
 * @title Subscriptions contract
 */
-contract Subscriptions is NonTransferableCapped, CanReclaimToken {
+contract Subscriptions is NonTransferableCapped, FinanceManager {
     string public constant name = "Subscriptions";
     string public constant symbol = "Subs";
     uint8 public constant decimals = 0;

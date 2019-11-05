@@ -5,7 +5,7 @@ import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Finance.sol";
 
-contract CanReclaimToken is Ownable {
+contract FinanceManager is Ownable {
     using Address for address;
     Finance public finance;
 
