@@ -48,7 +48,7 @@ contract SubscriptionsMinter is CanReclaimToken {
         steps[0].price = 10**18;
         steps[1].border = 900000;
         steps[1].price = 2 * 10**18;
-        
+
         sp = Sponsorships(spAddr);
         subs = Subscriptions(subsAddr);
         finance = Finance(financeAddr);
@@ -87,9 +87,7 @@ contract SubscriptionsMinter is CanReclaimToken {
         }
         uint256 purchaseTokenAmount = subsAmount.mul(price);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            require(purchaseToken.approve(address(finance), purchaseTokenAmount), APPROVE_ERROR);
-
-            finance.deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
             emit SubscriptionsPurchased(msg.sender, subsAmount);
             require(subs.mint(msg.sender, subsAmount), MINT_ERROR);
 

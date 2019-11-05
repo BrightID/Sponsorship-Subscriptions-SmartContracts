@@ -8,7 +8,6 @@ import "./Finance.sol";
 contract CanReclaimToken is Ownable {
     using Address for address;
     Finance public finance;
-    ERC20 internal token;
 
     string private constant APPROVE_ERROR = "Approve error.";
     string private constant RECLAIM_MESSAGE = "Reclaiming tokens sent by mistake.";
@@ -44,14 +43,28 @@ contract CanReclaimToken is Ownable {
     {
         require(tokenAddr.isContract(), IS_NOT_CONTRACT);
 
-        token = ERC20(tokenAddr);
+        ERC20 token = ERC20(tokenAddr);
         uint256 balance = token.balanceOf(address(this));
         require(0 < balance, ZERO_BALANCE);
 
-        require(token.approve(address(finance), balance), APPROVE_ERROR);
-
-        finance.deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
+        deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
         emit ClaimedTokens(tokenAddr, balance);
+    }
+
+    /**
+    * @notice Deposit tokens of the specified type in the DAO.
+    * @dev Deposit the specified type of ERC20 tokens in the DAO.
+    * @param tokenAddr The address of the token contract.
+    * @param amount Amount of tokens sent.
+    * @param _reference Reason for payment.
+    */
+    function deposit(address tokenAddr, uint256 amount, string memory _reference)
+        internal
+    {
+        ERC20 token = ERC20(tokenAddr);
+        require(token.approve(address(finance), amount), APPROVE_ERROR);
+
+        finance.deposit(tokenAddr, amount, _reference);
     }
 
 }

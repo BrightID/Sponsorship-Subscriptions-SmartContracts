@@ -86,9 +86,7 @@ contract SponsorshipsMinter is CanReclaimToken {
         uint256 purchaseTokenAmount = spAmount.mul(price);
 
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            require(purchaseToken.approve(address(finance), purchaseTokenAmount), APPROVE_ERROR);
-
-            finance.deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
             emit SponsorshipsPurchased(msg.sender, spAmount);
             require(sp.mint(msg.sender, spAmount), MINT_ERROR);
 
