@@ -4,7 +4,6 @@ import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Sponsorships.sol";
-import "./Finance.sol";
 import "./FinanceManager.sol";
 
 
@@ -35,8 +34,8 @@ contract SponsorshipsMinter is FinanceManager {
         public
     {
         sp = Sponsorships(spAddr);
-        finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
+        setFinance(financeAddr);
         // The initial price is one.
         price = 10**18;
     }
