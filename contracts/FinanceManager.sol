@@ -52,7 +52,6 @@ contract FinanceManager is Ownable {
     }
 
     /**
-    * @notice Deposit tokens of the specified type.
     * @dev Deposit the specified type of ERC20 tokens using the finance app set
     * with setFinance().
     * @param tokenAddr Address of the token contract.
