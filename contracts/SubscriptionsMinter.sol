@@ -16,8 +16,8 @@ contract SubscriptionsMinter is FinanceManager {
 
     Subscriptions internal subs;
     Sponsorships internal sp;
-    ERC20 internal purchaseToken;
-
+    
+    ERC20 public purchaseToken;
     uint256 public cap;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
