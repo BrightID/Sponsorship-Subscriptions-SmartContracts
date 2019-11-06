@@ -1,2 +1,3 @@
-# BrightID-Sponsorship-Subscriptions-SmartContracts
-BrightID Sponsorship and Subscriptions Smart Contracts
+[Community Draft of Smart Contracts Spec](https://docs.google.com/document/d/15ru-G6M5dwy8daxmFD2-d_NulMJTpDyqp8tw4QfTPUg/edit#)
+
+[Pdf version of the spec](https://github.com/BrightID/Sponsorship-Subscriptions-SmartContracts/blob/master/Sponsorships%20and%20Subscriptions%20Spec.pdf)
