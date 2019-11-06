@@ -4,7 +4,6 @@ import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Sponsorships.sol";
 import "./Subscriptions.sol";
-import "./Finance.sol";
 import "./FinanceManager.sol";
 
 
