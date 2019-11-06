@@ -15,8 +15,8 @@ contract SponsorshipsMinter is FinanceManager {
     using Address for address;
 
     Sponsorships internal sp;
-    ERC20 internal purchaseToken;
-
+    
+    ERC20 public purchaseToken;
     uint256 public price;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment.";
