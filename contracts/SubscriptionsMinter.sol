@@ -51,8 +51,8 @@ contract SubscriptionsMinter is FinanceManager {
 
         sp = Sponsorships(spAddr);
         subs = Subscriptions(subsAddr);
-        finance = Finance(financeAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
+        setFinance(financeAddr);
         cap = subs.cap();
     }
 
