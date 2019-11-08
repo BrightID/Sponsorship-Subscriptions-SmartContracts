@@ -42,7 +42,7 @@ contract NonTransferable is MinterRole, Pausable {
      * - `to` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal {
-        require(account != address(0), "NonTransferableToken: mint to the zero address");
+        require(account != address(0), "NonTransferable: mint to the zero address");
 
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);
