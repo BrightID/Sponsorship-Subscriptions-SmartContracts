@@ -1,23 +1,25 @@
 pragma solidity ^0.5.0;
 
-import "./NonTransferable.sol";
+import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
+import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
+import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./FinanceManager.sol";
 
 
 /**
 * @title Sponsorships contract
 */
-contract Sponsorships is NonTransferable, FinanceManager {
+contract Sponsorships is ERC20Pausable, MinterRole, FinanceManager {
+     using SafeMath for uint256;
+
     string public constant name = "Sponsorships";
     string public constant symbol = "Sp";
     uint8 public constant decimals = 0;
 
-    string private constant INSUFFICIENT_UNASSIGNED = "Insufficient unassigned balance";
+    string private constant INSUFFICIENT_BALANCE = "Insufficient balance";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
 
     struct Account {
-        uint256 assigned;
-        uint256 unassigned;
         mapping (bytes32 => uint256) contexts;
     }
 
@@ -38,7 +40,6 @@ contract Sponsorships is NonTransferable, FinanceManager {
         onlyPositive(amount)
         returns (bool)
     {
-        accounts[account].unassigned = accounts[account].unassigned.add(amount);
         _mint(account, amount);
         return true;
     }
@@ -54,12 +55,11 @@ contract Sponsorships is NonTransferable, FinanceManager {
         whenNotPaused
         onlyPositive(amount)
     {
-        require(amount <= accounts[msg.sender].unassigned, INSUFFICIENT_UNASSIGNED);
+        require(amount <= balanceOf(msg.sender), INSUFFICIENT_BALANCE);
 
-        accounts[msg.sender].unassigned = accounts[msg.sender].unassigned.sub(amount);
-        accounts[msg.sender].assigned = accounts[msg.sender].assigned.add(amount);
         accounts[msg.sender].contexts[contextName] = accounts[msg.sender].contexts[contextName].add(amount);
         contextsBalance[contextName] = contextsBalance[contextName].add(amount);
+        _burn(msg.sender, amount);
     }
 
     /**
@@ -87,19 +87,6 @@ contract Sponsorships is NonTransferable, FinanceManager {
         returns (uint256)
     {
         return accounts[account].contexts[contextName];
-    }
-
-    /**
-    * @notice Returns the number of unassigned Sponsorships held by the account.
-    * @dev Returns the number of unassigned Sponsorships held by the account.
-    * @param account The Sponsorship holder's address.
-    */
-    function unassignedBalance(address account)
-        external
-        view
-        returns (uint256)
-    {
-        return accounts[account].unassigned;
     }
 
     /**
