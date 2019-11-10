@@ -33,9 +33,6 @@ var SpMinter = artifacts.require('SponsorshipsMinter.sol');
 var Subs = artifacts.require('Subscriptions.sol');
 var SubsMinter = artifacts.require('SubscriptionsMinter.sol');
 
-// This needs to match the total number of Subscriptions in all
-// steps defined in the SubscriptionsMinter contract.
-const cap = 900000;
 // The contract address of the Finance app of BMAIN DAO.
 const financeAddr = '';
 // The purchase token needs to be DAI or an equivalent. Several places define
@@ -48,7 +45,7 @@ module.exports = function (deployer) {
     await deployer.deploy(Sp);
     const instanceSp = await Sp.deployed();
 
-    await deployer.deploy(Subs, cap);
+    await deployer.deploy(Subs);
     const instanceSubs = await Subs.deployed();
 
     // The token used to purchase Sponsorships can be changed later.
