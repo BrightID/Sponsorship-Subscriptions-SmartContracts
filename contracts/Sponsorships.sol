@@ -2,7 +2,6 @@ pragma solidity 0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
 import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
-import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./FinanceManager.sol";
 
 
@@ -10,8 +9,6 @@ import "./FinanceManager.sol";
 * @title Sponsorships contract
 */
 contract Sponsorships is ERC20Pausable, MinterRole, FinanceManager {
-     using SafeMath for uint256;
-
     string public constant name = "Sponsorships";
     string public constant symbol = "Sp";
     uint8 public constant decimals = 0;

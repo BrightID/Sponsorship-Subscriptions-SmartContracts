@@ -1,7 +1,6 @@
 pragma solidity 0.5.0;
 
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./Sponsorships.sol";
 import "./Subscriptions.sol";
 import "./FinanceManager.sol";
@@ -11,8 +10,6 @@ import "./FinanceManager.sol";
 * @title Subscriptions minter contract
 */
 contract SubscriptionsMinter is FinanceManager {
-    using SafeMath for uint256;
-
     Subscriptions internal subs;
     Sponsorships internal sp;
 
