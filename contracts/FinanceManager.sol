@@ -20,52 +20,50 @@ contract FinanceManager is Ownable {
 
     /**
     * @notice Set the DAO finance app address where deposited or reclaimed tokens will go.
-    * @param financeAddr Address of a DAO's finance app with a deposit() function.
+    * @param _finance The DAO's finance app with a deposit() function.
     */
-    function setFinance(address financeAddr)
+    function setFinance(Finance _finance)
         external
         onlyOwner
     {
-        require(financeAddr.isContract(), IS_NOT_CONTRACT);
+        require(address(_finance).isContract(), IS_NOT_CONTRACT);
 
-        finance = Finance(financeAddr);
-        emit FinanceSet(financeAddr);
+        finance = _finance;
+        emit FinanceSet(address(_finance));
     }
 
     /**
     * @notice Reclaim tokens of the specified type sent to the smart contract.
     * @dev Reclaim the specified type of ERC20 tokens sent to the smart contract.
-    * Tokens will be deposited into the finance app set with setFinance(). 
-    * @param tokenAddr Address of the token contract.
+    * Tokens will be deposited into the finance app set with setFinance().
+    * @param token The token contract.
     */
-    function reclaimTokens(address tokenAddr)
+    function reclaimTokens(ERC20 token)
         external
         onlyOwner
     {
-        require(tokenAddr.isContract(), IS_NOT_CONTRACT);
+        require(address(token).isContract(), IS_NOT_CONTRACT);
 
-        ERC20 token = ERC20(tokenAddr);
         uint256 balance = token.balanceOf(address(this));
         require(0 < balance, ZERO_BALANCE);
 
-        deposit(address(tokenAddr), balance, RECLAIM_MESSAGE);
-        emit ClaimedTokens(tokenAddr, balance);
+        deposit(token, balance, RECLAIM_MESSAGE);
+        emit ClaimedTokens(address(token), balance);
     }
 
     /**
     * @dev Deposit the specified type of ERC20 tokens using the finance app set
     * with setFinance().
-    * @param tokenAddr Address of the token contract.
+    * @param token The token contract.
     * @param amount Number of tokens to deposit.
     * @param _reference Reason for the deposit.
     */
-    function deposit(address tokenAddr, uint256 amount, string memory _reference)
+    function deposit(ERC20 token, uint256 amount, string memory _reference)
         internal
     {
-        ERC20 token = ERC20(tokenAddr);
         require(token.approve(address(finance), amount), APPROVE_ERROR);
 
-        finance.deposit(tokenAddr, amount, _reference);
+        finance.deposit(address(token), amount, _reference);
     }
 
 }

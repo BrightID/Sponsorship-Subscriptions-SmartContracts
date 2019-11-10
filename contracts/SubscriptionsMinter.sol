@@ -39,7 +39,7 @@ contract SubscriptionsMinter is FinanceManager {
     event SubscriptionsPurchased(address account, uint256 price);
     event SponsorshipsClaimed(address account, uint256 amount);
 
-    constructor(address spAddr, address subsAddr, address purchaseTokenAddr)
+    constructor(Sponsorships _sp, Subscriptions _subs, ERC20 _purchaseToken)
         public
     {
         // Define the steps for the price of Subscriptions.
@@ -48,9 +48,9 @@ contract SubscriptionsMinter is FinanceManager {
         steps[1].border = 900000;
         steps[1].price = 2 * 10**18;
 
-        sp = Sponsorships(spAddr);
-        subs = Subscriptions(subsAddr);
-        purchaseToken = ERC20(purchaseTokenAddr);
+        sp = _sp;
+        subs = _subs;
+        purchaseToken = _purchaseToken;
         cap = subs.cap();
     }
 
@@ -85,7 +85,7 @@ contract SubscriptionsMinter is FinanceManager {
         }
         uint256 purchaseTokenAmount = subsAmount.mul(price);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
             emit SubscriptionsPurchased(msg.sender, subsAmount);
             require(subs.mint(msg.sender, subsAmount), MINT_ERROR);
 

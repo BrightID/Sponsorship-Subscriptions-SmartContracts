@@ -30,11 +30,11 @@ contract SponsorshipsMinter is FinanceManager {
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
-    constructor(address spAddr, address purchaseTokenAddr)
+    constructor(Sponsorships _sp, ERC20 _purchaseToken)
         public
     {
-        sp = Sponsorships(spAddr);
-        purchaseToken = ERC20(purchaseTokenAddr);
+        sp = _sp;
+        purchaseToken = _purchaseToken;
         // The initial price is one.
         price = 10**18;
     }
@@ -42,16 +42,16 @@ contract SponsorshipsMinter is FinanceManager {
     /**
     * @notice Set the ERC20 token used as payment for Sponsorships.
     * @dev Set the ERC20 token used as payment for Sponsorships.
-    * @param purchaseTokenAddr The address of the smart contract of the token used for payments.
+    * @param _purchaseToken The token used for payments.
     */
-    function setPurchaseToken(address purchaseTokenAddr)
+    function setPurchaseToken(ERC20 _purchaseToken)
         external
         onlyOwner
     {
-        require(purchaseTokenAddr.isContract(), IS_NOT_CONTRACT);
+        require(address(_purchaseToken).isContract(), IS_NOT_CONTRACT);
 
-        purchaseToken = ERC20(purchaseTokenAddr);
-        emit PurchaseTokenSet(purchaseTokenAddr);
+        purchaseToken = _purchaseToken;
+        emit PurchaseTokenSet(address(_purchaseToken));
     }
 
     /**
@@ -84,7 +84,7 @@ contract SponsorshipsMinter is FinanceManager {
         uint256 purchaseTokenAmount = spAmount.mul(price);
 
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            deposit(address(purchaseToken), purchaseTokenAmount, FINANCE_MESSAGE);
+            deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
             emit SponsorshipsPurchased(msg.sender, spAmount);
             require(sp.mint(msg.sender, spAmount), MINT_ERROR);
 
