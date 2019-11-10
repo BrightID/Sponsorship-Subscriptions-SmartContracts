@@ -30,7 +30,7 @@ contract SponsorshipsMinter is FinanceManager {
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
-    constructor(address spAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address spAddr, address purchaseTokenAddr)
         public
     {
         sp = Sponsorships(spAddr);

@@ -42,7 +42,6 @@ const financeAddr = '';
 // a starting or base price of "1."
 const purchaseTokenAddr = '';
 
-
 module.exports = function (deployer) {
   deployer.then(async () => {
 
@@ -53,11 +52,11 @@ module.exports = function (deployer) {
     const instanceSubs = await Subs.deployed();
 
     // The token used to purchase Sponsorships can be changed later.
-    await deployer.deploy(SpMinter, instanceSp.address, purchaseTokenAddr, financeAddr);
+    await deployer.deploy(SpMinter, instanceSp.address, purchaseTokenAddr);
     const instanceSpMinter = await SpMinter.deployed();
 
     // The token used to purchase Subscriptions can't be changed, but the sale has a cap and is meant to end.
-    await deployer.deploy(SubsMinter, instanceSp.address, instanceSubs.address, purchaseTokenAddr, financeAddr);
+    await deployer.deploy(SubsMinter, instanceSp.address, instanceSubs.address, purchaseTokenAddr);
     const instanceSubsMinter = await SubsMinter.deployed();
 
     await instanceSp.addMinter(instanceSpMinter.address);

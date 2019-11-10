@@ -39,7 +39,7 @@ contract SubscriptionsMinter is FinanceManager {
     event SubscriptionsPurchased(address account, uint256 price);
     event SponsorshipsClaimed(address account, uint256 amount);
 
-    constructor(address spAddr, address subsAddr, address purchaseTokenAddr, address financeAddr)
+    constructor(address spAddr, address subsAddr, address purchaseTokenAddr)
         public
     {
         // Define the steps for the price of Subscriptions.
