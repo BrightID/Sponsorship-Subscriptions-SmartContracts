@@ -22,7 +22,7 @@ contract FinanceManager is Ownable {
     * @param financeAddr Address of a DAO's finance app with a deposit() function.
     */
     function setFinance(address financeAddr)
-        public
+        external
         onlyOwner
     {
         require(financeAddr.isContract(), IS_NOT_CONTRACT);
