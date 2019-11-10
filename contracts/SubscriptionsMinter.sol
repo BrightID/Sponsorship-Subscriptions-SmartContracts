@@ -13,7 +13,10 @@ contract SubscriptionsMinter is FinanceManager {
     Sponsorships internal sp;
 
     ERC20 public purchaseToken;
-    uint256 public cap;
+
+    // This needs to match the total number of Subscriptions in all
+    // steps defined in the SubscriptionsMinter contract.
+    uint256 public constant CAP = 900000;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant APPROVE_ERROR = "Approve error";
@@ -47,7 +50,6 @@ contract SubscriptionsMinter is FinanceManager {
         sp = _sp;
         subs = _subs;
         purchaseToken = _purchaseToken;
-        cap = subs.cap();
     }
 
     /**
@@ -60,7 +62,7 @@ contract SubscriptionsMinter is FinanceManager {
     {
         uint8 stepNumber;
         uint256 totalSupply = subs.totalSupply();
-        require(totalSupply < cap, CAP_EXCEEDED);
+        require(totalSupply < CAP, CAP_EXCEEDED);
 
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
         if (totalSupply < steps[0].border) {

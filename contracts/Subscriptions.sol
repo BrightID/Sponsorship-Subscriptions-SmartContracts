@@ -1,13 +1,13 @@
 pragma solidity 0.5.0;
 
-import "./NonTransferableCapped.sol";
+import "./NonTransferable.sol";
 import "./FinanceManager.sol";
 
 
 /**
 * @title Subscriptions contract
 */
-contract Subscriptions is NonTransferableCapped, FinanceManager {
+contract Subscriptions is NonTransferable, FinanceManager {
     string public constant name = "Subscriptions";
     string public constant symbol = "Subs";
     uint8 public constant decimals = 0;
@@ -24,8 +24,6 @@ contract Subscriptions is NonTransferableCapped, FinanceManager {
     }
 
     mapping(address => Account) private accounts;
-
-    constructor(uint256 _cap) NonTransferableCapped(_cap) public {}
 
     /**
     * @notice Mint Subscriptions.
@@ -50,7 +48,7 @@ contract Subscriptions is NonTransferableCapped, FinanceManager {
     /**
     * @notice Tells the minter how many Sponsorships the account holder can claim.
     * @dev Tells the minter how many Sponsorships the account holder can claim so it can
-    * then mint them. Also increments the account's "received" counter to indicate the  
+    * then mint them. Also increments the account's "received" counter to indicate the
     * number of Sponsorships that have been claimed.
     * @param account The claimer's account address.
     * @return The number of Sponsorships the account holder can claim.
