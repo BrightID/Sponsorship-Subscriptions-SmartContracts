@@ -37,11 +37,10 @@ var SubsMinter = artifacts.require('SubscriptionsMinter.sol');
 // steps defined in the SubscriptionsMinter contract.
 const cap = 900000;
 // The contract address of the Finance app of BMAIN DAO.
-const financeAddr = '0x0e224992f495860e555e8312143e09663d657f2b';
+const financeAddr = '';
 // The purchase token needs to be DAI or an equivalent. Several places define
 // a starting or base price of "1."
-const purchaseTokenAddr = '0xDD3a0A73Ff48180f248B953ea7715dAEF35fe812';
-// purchaseTokenAddr = '0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359'; //mainnet
+const purchaseTokenAddr = '';
 
 
 module.exports = function (deployer) {
@@ -67,6 +66,8 @@ module.exports = function (deployer) {
 
     await instanceSp.setFinance(financeAddr);
     await instanceSubs.setFinance(financeAddr);
+    await instanceSpMinter.setFinance(financeAddr);
+    await instanceSubsMinter.setFinance(financeAddr);
 
   })
 

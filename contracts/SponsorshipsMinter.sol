@@ -15,7 +15,7 @@ contract SponsorshipsMinter is FinanceManager {
     using Address for address;
 
     Sponsorships internal sp;
-    
+
     ERC20 public purchaseToken;
     uint256 public price;
 
@@ -35,7 +35,6 @@ contract SponsorshipsMinter is FinanceManager {
     {
         sp = Sponsorships(spAddr);
         purchaseToken = ERC20(purchaseTokenAddr);
-        setFinance(financeAddr);
         // The initial price is one.
         price = 10**18;
     }
