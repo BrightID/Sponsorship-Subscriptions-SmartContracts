@@ -1,9 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.0;
 
 import "/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "/openzeppelin-solidity/contracts/utils/Address.sol";
 import "./Finance.sol";
+
 
 contract FinanceManager is Ownable {
     using Address for address;
