@@ -27,6 +27,8 @@ contract Sponsorships is ERC20Pausable, MinterRole, FinanceManager {
 
     mapping(bytes32 => uint256) private contextsBalance;
 
+    event SponsorshipsAssigned(address account, bytes32 contextName, uint256 amount);
+
     /**
     * @notice Mint Sponsorships.
     * @dev Mint Sponsorships.
@@ -60,6 +62,7 @@ contract Sponsorships is ERC20Pausable, MinterRole, FinanceManager {
         accounts[msg.sender].contexts[contextName] = accounts[msg.sender].contexts[contextName].add(amount);
         contextsBalance[contextName] = contextsBalance[contextName].add(amount);
         _burn(msg.sender, amount);
+        emit SponsorshipsAssigned(msg.sender, contextName, amount);
     }
 
     /**
