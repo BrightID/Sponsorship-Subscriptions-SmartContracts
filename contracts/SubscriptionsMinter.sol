@@ -14,8 +14,7 @@ contract SubscriptionsMinter is FinanceManager {
 
     ERC20 public purchaseToken;
 
-    // This needs to match the total number of Subscriptions in all
-    // steps defined in the SubscriptionsMinter contract.
+    // This needs to match the total number of Subscriptions in all steps.
     uint256 public constant CAP = 900000;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
