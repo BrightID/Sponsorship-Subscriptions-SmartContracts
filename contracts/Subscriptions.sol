@@ -26,6 +26,8 @@ contract Subscriptions is ERC20Pausable, MinterRole, FinanceManager {
 
     mapping(address => Account) private accounts;
 
+    event SubscriptionsActivated(address account, uint256 amount);
+
     /**
     * @notice Mint Subscriptions.
     * @dev Mint Subscriptions.
@@ -58,6 +60,7 @@ contract Subscriptions is ERC20Pausable, MinterRole, FinanceManager {
         accounts[msg.sender].timestamps.push(timestamp);
         accounts[msg.sender].batches[timestamp] = amount;
         _burn(msg.sender, amount);
+        emit SubscriptionsActivated(msg.sender, amount);
         return true;
     }
 
