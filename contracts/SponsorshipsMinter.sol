@@ -16,7 +16,6 @@ contract SponsorshipsMinter is FinanceManager {
     uint256 public price;
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment.";
-    string private constant APPROVE_ERROR = "Approve error.";
     string private constant MINT_ERROR = "Mint error.";
     string private constant FINANCE_MESSAGE = "Revenue of Sponsorships sale.";
     string private constant INVALID_PRICE = "Price must be greater than zero.";
