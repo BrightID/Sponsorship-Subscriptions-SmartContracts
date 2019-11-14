@@ -21,7 +21,7 @@ contract SponsorshipsMinter is FinanceManager {
     string private constant INVALID_PRICE = "Price must be greater than zero.";
     string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
 
-    event SponsorshipsPurchased(address account, uint256 price);
+    event SponsorshipsPurchased(address account, uint256 spAmount, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
@@ -80,7 +80,7 @@ contract SponsorshipsMinter is FinanceManager {
         totalSold.add(spAmount);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
             deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-            emit SponsorshipsPurchased(msg.sender, spAmount);
+            emit SponsorshipsPurchased(msg.sender, spAmount, price);
             require(sp.mint(msg.sender, spAmount), MINT_ERROR);
 
             return true;
