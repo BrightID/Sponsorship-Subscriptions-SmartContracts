@@ -44,6 +44,24 @@ contract Subscriptions is ERC20Pausable, MinterRole, FinanceManager {
     }
 
     /**
+    * @notice Activate Subscriptions.
+    * @dev Activate Subscriptions.
+    * @param amount The number of Subscriptions.
+    */
+    function activate(uint256 amount)
+        public
+        whenNotPaused
+        onlyPositive(amount)
+        returns (bool)
+    {
+        uint256 timestamp = now;
+        accounts[msg.sender].timestamps.push(timestamp);
+        accounts[msg.sender].batches[timestamp] = amount;
+        _burn(msg.sender, amount);
+        return true;
+    }
+
+    /**
     * @notice Tells the minter how many Sponsorships the account holder can claim.
     * @dev Tells the minter how many Sponsorships the account holder can claim so it can
     * then mint them. Also increments the account's "received" counter to indicate the
