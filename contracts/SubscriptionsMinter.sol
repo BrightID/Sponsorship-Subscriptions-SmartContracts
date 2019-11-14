@@ -12,6 +12,8 @@ contract SubscriptionsMinter is FinanceManager {
     Subscriptions internal subs;
     Sponsorships internal sp;
 
+    uint256 public totalSold;
+
     ERC20 public purchaseToken;
 
     // This needs to match the total number of Subscriptions in all steps.
@@ -60,11 +62,10 @@ contract SubscriptionsMinter is FinanceManager {
         returns (bool success)
     {
         uint8 stepNumber;
-        uint256 totalSupply = subs.totalSupply();
-        require(totalSupply < CAP, CAP_EXCEEDED);
+        require(totalSold < CAP, CAP_EXCEEDED);
 
         uint256 allowance = purchaseToken.allowance(msg.sender, address(this));
-        if (totalSupply < steps[0].border) {
+        if (totalSold < steps[0].border) {
             stepNumber = 0;
         }
         else {
@@ -73,13 +74,14 @@ contract SubscriptionsMinter is FinanceManager {
         uint256 price = steps[stepNumber].price;
         require(price <= allowance, INSUFFICIENT_PAYMENT);
 
-        uint256 availableSubs = steps[stepNumber].border - totalSupply;
+        uint256 availableSubs = steps[stepNumber].border.sub(totalSold);
         uint256 subsAmount = allowance.div(price);
         // Only sell the Subscriptions left in the current step. If the user wants to buy
         // more Subscriptions from the next step, they will have to make another purchase.
         if (availableSubs < subsAmount) {
             subsAmount = availableSubs;
         }
+        totalSold.add(subsAmount);
         uint256 purchaseTokenAmount = subsAmount.mul(price);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
             deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
@@ -100,8 +102,7 @@ contract SubscriptionsMinter is FinanceManager {
         view
         returns (uint256)
     {
-        uint256 totalSupply = subs.totalSupply();
-        if (totalSupply < steps[0].border) {
+        if (totalSold < steps[0].border) {
             return steps[0].price;
         }
         return steps[1].price;
