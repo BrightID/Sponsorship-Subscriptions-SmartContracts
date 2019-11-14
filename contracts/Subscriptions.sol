@@ -1,13 +1,14 @@
 pragma solidity 0.5.0;
 
-import "./NonTransferable.sol";
+import "/openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
+import "/openzeppelin-solidity/contracts/access/roles/MinterRole.sol";
 import "./FinanceManager.sol";
 
 
 /**
 * @title Subscriptions contract
 */
-contract Subscriptions is NonTransferable, FinanceManager {
+contract Subscriptions is ERC20Pausable, MinterRole, FinanceManager {
     string public constant name = "Subscriptions";
     string public constant symbol = "Subs";
     uint8 public constant decimals = 0;
@@ -38,9 +39,6 @@ contract Subscriptions is NonTransferable, FinanceManager {
         onlyPositive(amount)
         returns (bool)
     {
-        uint256 timestamp = now;
-        accounts[account].timestamps.push(timestamp);
-        accounts[account].batches[timestamp] = amount;
         _mint(account, amount);
         return true;
     }
