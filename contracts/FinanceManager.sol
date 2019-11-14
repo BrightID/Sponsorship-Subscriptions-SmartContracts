@@ -10,6 +10,7 @@ import "./Finance.sol";
 contract FinanceManager is Ownable {
     using Address for address;
     using SafeMath for uint256;
+
     Finance public finance;
 
     string private constant APPROVE_ERROR = "Approve error.";
@@ -17,7 +18,7 @@ contract FinanceManager is Ownable {
     string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
     string private constant ZERO_BALANCE = "There are no tokens of this type to be reclaimed.";
 
-    event ClaimedTokens(address tokenAddr, uint256 amount);
+    event ReclaimedTokens(address tokenAddr, uint256 amount);
     event FinanceSet(address financeAddr);
 
     /**
@@ -50,7 +51,7 @@ contract FinanceManager is Ownable {
         require(0 < balance, ZERO_BALANCE);
 
         deposit(token, balance, RECLAIM_MESSAGE);
-        emit ClaimedTokens(address(token), balance);
+        emit ReclaimedTokens(address(token), balance);
     }
 
     /**
