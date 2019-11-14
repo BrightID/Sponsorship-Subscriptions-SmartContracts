@@ -10,6 +10,8 @@ import "./FinanceManager.sol";
 contract SponsorshipsMinter is FinanceManager {
     Sponsorships internal sp;
 
+    uint256 public totalSold;
+
     ERC20 public purchaseToken;
     uint256 public price;
 
@@ -76,7 +78,7 @@ contract SponsorshipsMinter is FinanceManager {
 
         uint256 spAmount = allowance.div(price);
         uint256 purchaseTokenAmount = spAmount.mul(price);
-
+        totalSold.add(spAmount);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
             deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
             emit SponsorshipsPurchased(msg.sender, spAmount);
