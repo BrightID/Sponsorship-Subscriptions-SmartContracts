@@ -22,7 +22,7 @@ contract SponsorshipsMinter is FinanceManager {
     string private constant INVALID_PRICE = "Price must be greater than zero.";
     string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
 
-    event SponsorshipsPurchased(address account, uint256 spAmount, uint256 price);
+    event SponsorshipsPurchased(address account, uint256 amount, uint256 price);
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
