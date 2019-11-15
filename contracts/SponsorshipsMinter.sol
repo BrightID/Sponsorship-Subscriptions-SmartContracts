@@ -17,6 +17,7 @@ contract SponsorshipsMinter is FinanceManager {
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment.";
     string private constant MINT_ERROR = "Mint error.";
+    string private constant TRANSFER_FROM_ERROR = "Purchase token transferFrom failed.";
     string private constant FINANCE_MESSAGE = "Revenue of Sponsorships sale.";
     string private constant INVALID_PRICE = "Price must be greater than zero.";
     string private constant IS_NOT_CONTRACT = "Address doesn't belong to a smart contract.";
@@ -78,14 +79,13 @@ contract SponsorshipsMinter is FinanceManager {
         uint256 spAmount = allowance.div(price);
         uint256 purchaseTokenAmount = spAmount.mul(price);
         totalSold.add(spAmount);
-        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-            emit SponsorshipsPurchased(msg.sender, spAmount, price);
-            require(sp.mint(msg.sender, spAmount), MINT_ERROR);
+        require(purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 
-            return true;
-        }
-        return false;
+        deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
+        require(sp.mint(msg.sender, spAmount), MINT_ERROR);
+
+        emit SponsorshipsPurchased(msg.sender, spAmount, price);
+        return true;
     }
 
     /**
