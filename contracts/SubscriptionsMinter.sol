@@ -21,6 +21,7 @@ contract SubscriptionsMinter is FinanceManager {
 
     string private constant INSUFFICIENT_PAYMENT = "Insufficient payment";
     string private constant MINT_ERROR = "Mint error";
+    string private constant TRANSFER_FROM_ERROR = "Purchase token transferFrom failed.";
     string private constant FINANCE_MESSAGE = "Revenue of Subscriptions sale";
     string private constant CAP_EXCEEDED = "Cap exceeded";
 
@@ -82,14 +83,13 @@ contract SubscriptionsMinter is FinanceManager {
         }
         totalSold.add(subsAmount);
         uint256 purchaseTokenAmount = subsAmount.mul(price);
-        if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
-            deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-            emit SubscriptionsPurchased(msg.sender, subsAmount, price);
-            require(subs.mint(msg.sender, subsAmount), MINT_ERROR);
+        require(purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 
-            return true;
-        }
-        return false;
+        deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
+        require(subs.mint(msg.sender, subsAmount), MINT_ERROR);
+
+        emit SubscriptionsPurchased(msg.sender, subsAmount, price);
+        return true;
     }
 
     /**
@@ -120,11 +120,11 @@ contract SubscriptionsMinter is FinanceManager {
         // the Subscriptions contract will consider these Sponsorships to actually have
         // been received.
         uint256 claimableAmount = subs.claim(msg.sender);
-        emit SponsorshipsClaimed(msg.sender, claimableAmount);
         // Next tell the Sponsorships contract to actually mint the correct number of
         // Sponsorships into the claimer's account address.
         require(sp.mint(msg.sender, claimableAmount), MINT_ERROR);
 
+        emit SponsorshipsClaimed(msg.sender, claimableAmount);
         return true;
     }
 
