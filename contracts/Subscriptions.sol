@@ -81,7 +81,7 @@ contract Subscriptions is ERC20Pausable, MinterRole, FinanceManager {
         uint256 claimableAmount = claimable(account);
         require(0 < claimableAmount, ALL_SPONSORSHIPS_CLAIMED);
 
-        accounts[account].received += claimableAmount;
+        accounts[account].received = accounts[account].received.add(claimableAmount);
         return claimableAmount;
     }
 
