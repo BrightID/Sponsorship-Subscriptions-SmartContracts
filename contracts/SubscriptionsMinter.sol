@@ -81,7 +81,7 @@ contract SubscriptionsMinter is FinanceManager {
         if (availableSubs < subsAmount) {
             subsAmount = availableSubs;
         }
-        totalSold.add(subsAmount);
+        totalSold = totalSold.add(subsAmount);
         uint256 purchaseTokenAmount = subsAmount.mul(price);
         require(purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 

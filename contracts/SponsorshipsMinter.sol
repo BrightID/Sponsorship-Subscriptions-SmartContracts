@@ -78,7 +78,7 @@ contract SponsorshipsMinter is FinanceManager {
 
         uint256 spAmount = allowance.div(price);
         uint256 purchaseTokenAmount = spAmount.mul(price);
-        totalSold.add(spAmount);
+        totalSold = totalSold.add(spAmount);
         require(purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 
         deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
