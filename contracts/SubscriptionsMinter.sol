@@ -35,7 +35,7 @@ contract SubscriptionsMinter is FinanceManager {
     // Each step of the price function is numbered, starting from zero.
     mapping(uint8 => Step) private steps;
 
-    event SubscriptionsPurchased(address account, uint256 price);
+    event SubscriptionsPurchased(address account, uint256 amount, uint256 price);
     event SponsorshipsClaimed(address account, uint256 amount);
 
     constructor(Sponsorships _sp, Subscriptions _subs, ERC20 _purchaseToken)
@@ -84,7 +84,7 @@ contract SubscriptionsMinter is FinanceManager {
         uint256 purchaseTokenAmount = subsAmount.mul(price);
         if (purchaseToken.transferFrom(msg.sender, address(this), purchaseTokenAmount)) {
             deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-            emit SubscriptionsPurchased(msg.sender, subsAmount);
+            emit SubscriptionsPurchased(msg.sender, subsAmount, price);
             require(subs.mint(msg.sender, subsAmount), MINT_ERROR);
 
             return true;
