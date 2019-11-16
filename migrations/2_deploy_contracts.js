@@ -17,13 +17,13 @@
 // This will change the recipient of reclaimed tokens; for the two minter
 // contracts, it will also change the recipient of funds from purchases.
 
-// The executor acquires the permanent ability to mint both Sponsorships
-// and Subscriptions to any address, and to mark Sponsorships from
+// The executor acquires the ability to mint both Sponsorships and
+// Subscriptions to any address, and to mark Sponsorships from
 // Subscriptions as claimed (without actually minting them) for any address
 // by calling Subscriptions.claim() directly. Look for the "onlyMinter"
 // modifier on contract functions.
 
-// The executor acquires the permanent ability to pause mint and claim
+// The executor acquires the ability to pause mint, claim, and activate
 // functions for Subscriptions and mint and assignContext functions for
 // Sponsorships. Look for the "whenNotPaused" modifier on contract functions.
 
