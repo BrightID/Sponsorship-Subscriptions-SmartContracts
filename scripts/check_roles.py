@@ -17,10 +17,10 @@ def check_minters(abbreviation):
         minter = minters_filter.format_entry(minter_bytes)
         minter_addr = minter['args']['account']
         if contracts[abbreviation].is_minter(minter_addr):
-            print('Minter: {}'.format(minter_addr))
+            print('{} was added as a minter.'.format(minter_addr))
             results.append(minter_addr)
         else:
-            print('{} wes a minter but removed.'.format(minter_addr))
+            print('{} was removed as a minter.'.format(minter_addr))
     return results
 
 
@@ -33,10 +33,10 @@ def check_pausers(abbreviation):
         minter = pausers_filter.format_entry(minter_bytes)
         minter_addr = minter['args']['account']
         if contracts[abbreviation].is_pauser(minter_addr):
-            print('Pauser: {}'.format(minter_addr))
+            print('{} was added as a pauser.'.format(minter_addr))
             results.append(minter_addr)
         else:
-            print('{} wes a pauser but removed.'.format(minter_addr))
+            print('{} was removed as a pauser.'.format(minter_addr))
     return results
 
 
