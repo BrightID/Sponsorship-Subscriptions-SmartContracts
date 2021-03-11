@@ -33,8 +33,8 @@ contract IdSponsorshipsMinter is FinanceManager {
     event PurchaseTokenSet(address purchaseTokenAddr);
     event PriceSet(uint256 price);
 
-    constructor(IdSponsorships _sp, IdSubscriptions _idSubs, ERC20 _purchaseToken) {
-        idSp = _sp;
+    constructor(IdSponsorships _idSp, IdSubscriptions _idSubs, ERC20 _purchaseToken) {
+        idSp = _idSp;
         idSubs = _idSubs;
         purchaseToken = _purchaseToken;
         // The initial price is one.
