@@ -79,6 +79,11 @@ contract Wrapper is Ownable {
         uint256 spAmount = allowance.div(SCALE);
         require(spAmount > 0, INSUFFICIENT_ALLOWANCE);
 
+        uint256 balance = sp.balanceOf(address(this));
+        if (balance < spAmount) {
+            spAmount = balance;
+        }
+
         idSp.burnFrom(_msgSender(), spAmount.mul(SCALE));
         require(sp.transfer(_msgSender(), spAmount), TRANSFER_ERROR);
 
@@ -115,6 +120,11 @@ contract Wrapper is Ownable {
         uint256 allowance = idSubs.allowance(_msgSender(), address(this));
         uint256 subsAmount = allowance.div(SCALE);
         require(subsAmount > 0, INSUFFICIENT_ALLOWANCE);
+
+        uint256 balance = subs.balanceOf(address(this));
+        if (balance < subsAmount) {
+            subsAmount = balance;
+        }
 
         idSubs.burnFrom(_msgSender(), subsAmount.mul(SCALE));
         require(subs.transfer(_msgSender(), subsAmount), TRANSFER_ERROR);
