@@ -100,10 +100,10 @@ contract Wrapper is Ownable {
         returns (bool success)
     {
         uint256 allowance = subs.allowance(_msgSender(), address(this));
-        require(sp.transferFrom(_msgSender(), address(this), allowance), TRANSFER_FROM_ERROR);
+        require(subs.transferFrom(_msgSender(), address(this), allowance), TRANSFER_FROM_ERROR);
 
         uint256 idSubsAmount = allowance.mul(SCALE);
-        require(idSp.mint(_msgSender(), idSubsAmount), MINT_ERROR);
+        require(idSubs.mint(_msgSender(), idSubsAmount), MINT_ERROR);
 
         emit SubscriptionsWrapped(_msgSender(), allowance);
         return true;
