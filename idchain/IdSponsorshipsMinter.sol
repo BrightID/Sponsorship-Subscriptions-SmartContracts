@@ -15,6 +15,8 @@ import "./FinanceManager.sol";
 contract IdSponsorshipsMinter is FinanceManager {
     using SafeMath for uint256;
 
+    uint256 TO_WEI = 10**18;
+
     IdSponsorships internal idSp;
     IdSubscriptions internal idSubs;
     ERC20 public purchaseToken;
@@ -86,7 +88,7 @@ contract IdSponsorshipsMinter is FinanceManager {
         require(purchaseToken.transferFrom(_msgSender(), address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 
         deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-        require(idSp.mint(_msgSender(), spAmount), MINT_ERROR);
+        require(idSp.mint(_msgSender(), spAmount.mul(TO_WEI)), MINT_ERROR);
 
         emit IdSponsorshipsPurchased(_msgSender(), spAmount, price);
         return true;
