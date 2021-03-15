@@ -15,6 +15,8 @@ import "./FinanceManager.sol";
 contract IdSponsorshipsMinter is FinanceManager {
     using SafeMath for uint256;
 
+    uint256 public minted;
+
     uint256 TO_WEI = 10**18;
 
     IdSponsorships internal idSp;
@@ -36,6 +38,7 @@ contract IdSponsorshipsMinter is FinanceManager {
     event PriceSet(uint256 price);
 
     constructor(IdSponsorships _idSp, IdSubscriptions _idSubs, ERC20 _purchaseToken) {
+        minted = 0;
         idSp = _idSp;
         idSubs = _idSubs;
         purchaseToken = _purchaseToken;
@@ -89,6 +92,7 @@ contract IdSponsorshipsMinter is FinanceManager {
 
         deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
         require(idSp.mint(_msgSender(), spAmount.mul(TO_WEI)), MINT_ERROR);
+        minted = minted.add(spAmount.mul(TO_WEI));
 
         emit IdSponsorshipsPurchased(_msgSender(), spAmount, price);
         return true;
@@ -110,6 +114,7 @@ contract IdSponsorshipsMinter is FinanceManager {
         // Next tell the IdSponsorships contract to actually mint the correct number of
         // IdSponsorships into the claimer's account address.
         require(idSp.mint(_msgSender(), claimableAmount), MINT_ERROR);
+        minted = minted.add(claimableAmount);
 
         emit IdSponsorshipsClaimed(_msgSender(), claimableAmount);
         return true;
