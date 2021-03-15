@@ -15,11 +15,14 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contr
 contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
     using SafeMath for uint256;
 
+    uint256 public activated;
+
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     string private constant ALL_SPONSORSHIPS_CLAIMED = "All Sponsorships claimed";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
+    string private constant UNAUTHORIZED_MINTER = "Caller is not a minter";
+
 
     struct Account {
         uint256 received;
@@ -31,11 +34,12 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
 
     mapping(address => Account) private accounts;
 
-    event IdSubscriptionsActivated(address account, uint256 amount);
+    event IdSubscriptionsActivated(address indexed account, uint256 amount);
 
     constructor()
         ERC20("IdSubscriptions", "IdSubs")
     {
+        activated = 0;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
@@ -51,7 +55,7 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         onlyPositive(amount)
         returns (bool)
     {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Caller is not a minter");
+        require(hasRole(MINTER_ROLE, _msgSender()), UNAUTHORIZED_MINTER);
 
         _mint(account, amount);
         return true;
@@ -69,9 +73,10 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         returns (bool)
     {
         uint256 timestamp = block.timestamp;
+        _burn(_msgSender(), amount);
+        activated = activated.add(amount);
         accounts[_msgSender()].timestamps.push(timestamp);
         accounts[_msgSender()].batches[timestamp] = amount;
-        _burn(_msgSender(), amount);
         emit IdSubscriptionsActivated(_msgSender(), amount);
         return true;
     }
@@ -89,7 +94,7 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         whenNotPaused
         returns (uint256)
     {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Caller is not a minter");
+        require(hasRole(MINTER_ROLE, _msgSender()), UNAUTHORIZED_MINTER);
 
         uint256 claimableAmount = claimable(account);
         require(0 < claimableAmount, ALL_SPONSORSHIPS_CLAIMED);
