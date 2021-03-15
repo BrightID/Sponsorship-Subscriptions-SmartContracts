@@ -16,10 +16,10 @@ contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
     using SafeMath for uint256;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     string private constant INSUFFICIENT_BALANCE = "Insufficient balance";
     string private constant INVALID_AMOUNT = "Amount must be greater than zero";
+    string private constant UNAUTHORIZED_MINTER = "Caller is not a minter";
 
     struct Account {
         mapping (bytes32 => uint256) contexts;
@@ -49,7 +49,7 @@ contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         onlyPositive(amount)
         returns (bool)
     {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Caller is not a minter");
+        require(hasRole(MINTER_ROLE, _msgSender()), UNAUTHORIZED_MINTER);
 
         _mint(account, amount);
         return true;
