@@ -3,7 +3,6 @@
 pragma solidity >=0.6.0 <0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20Pausable.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20Burnable.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/access/AccessControl.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/math/SafeMath.sol";
@@ -12,7 +11,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contr
 /**
  * @title IdSponsorships contract
  */
-contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
+contract IdSponsorships is ERC20, ERC20Burnable, AccessControl {
     using SafeMath for uint256;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -45,7 +44,6 @@ contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
      */
     function mint(address account, uint256 amount)
         public
-        whenNotPaused
         onlyPositive(amount)
         returns (bool)
     {
@@ -63,7 +61,6 @@ contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
      */
     function assignContext(bytes32 contextName, uint256 amount)
         external
-        whenNotPaused
         onlyPositive(amount)
     {
         require(amount <= balanceOf(_msgSender()), INSUFFICIENT_BALANCE);
@@ -99,16 +96,6 @@ contract IdSponsorships is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         returns (uint256)
     {
         return accounts[account].contexts[contextName];
-    }
-
-    /**
-     * @dev See {ERC20Pausable-_beforeTokenTransfer}.
-     */
-	function _beforeTokenTransfer(address from, address to, uint256 amount)
-		internal
-		virtual
-		override(ERC20Pausable, ERC20) {
-        super._beforeTokenTransfer(from, to, amount);
     }
 
     /**

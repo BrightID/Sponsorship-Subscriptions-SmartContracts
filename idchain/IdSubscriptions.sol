@@ -3,7 +3,6 @@
 pragma solidity >=0.6.0 <0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20Pausable.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/token/ERC20/ERC20Burnable.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/access/AccessControl.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/math/SafeMath.sol";
@@ -12,7 +11,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contr
 /**
  * @title IdSubscriptions contract
  */
-contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
+contract IdSubscriptions is ERC20, ERC20Burnable, AccessControl {
     using SafeMath for uint256;
 
     uint256 public activated;
@@ -51,7 +50,6 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
      */
     function mint(address account, uint256 amount)
         public
-        whenNotPaused
         onlyPositive(amount)
         returns (bool)
     {
@@ -68,7 +66,6 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
      */
     function activate(uint256 amount)
         public
-        whenNotPaused
         onlyPositive(amount)
         returns (bool)
     {
@@ -91,7 +88,6 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
      */
     function claim(address account)
         external
-        whenNotPaused
         returns (uint256)
     {
         require(hasRole(MINTER_ROLE, _msgSender()), UNAUTHORIZED_MINTER);
@@ -118,7 +114,7 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         uint256 allProduced;
 
         // Loop through all the batches.
-        for (uint i = 0; i < accounts[account].timestamps.length; i++) {
+        for (uint8 i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             // The number of IdSubscriptions purchased in the batch that matches the timestamp.
             uint256 subsInBatch = accounts[account].batches[timestamp];
@@ -136,16 +132,6 @@ contract IdSubscriptions is ERC20, ERC20Pausable, ERC20Burnable, AccessControl {
         }
         uint256 claimableAmount = allProduced - accounts[account].received;
         return claimableAmount;
-    }
-
-    /**
-     * @dev See {ERC20Pausable-_beforeTokenTransfer}.
-     */
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        virtual
-        override(ERC20Pausable, ERC20) {
-        super._beforeTokenTransfer(from, to, amount);
     }
 
     /**
