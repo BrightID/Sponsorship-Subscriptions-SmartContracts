@@ -10,8 +10,8 @@ import "./IdSubscriptions.sol";
 
 
 /**
- * @dev This is a wrapper for sponsorship and subscription tokens
- * The approch here is, It gets sp or subs token and mints wraped ERC20 token.
+ * @dev This is a wrapper for sponsorship and subscription tokens.
+ * The approch here is, It gets sp or subs tokens and mints wraped ERC20 tokens.
  * It burns ERC20s and gives back the sp or subs.
  */
 contract Wrapper is Ownable {
@@ -50,8 +50,8 @@ contract Wrapper is Ownable {
     }
 
     /**
-     *@notice wrap sp to idSp.
-     *@dev A function that gets sp and mints IdSp.
+     *@notice wrap sp to idSp
+     *@dev A function that gets sp and mints idSp
      */
     function wrapSp()
         external
@@ -60,15 +60,14 @@ contract Wrapper is Ownable {
         uint256 allowance = sp.allowance(_msgSender(), address(this));
         require(sp.transferFrom(_msgSender(), address(this), allowance), TRANSFER_FROM_ERROR);
 
-        uint256 idSpAmount = allowance.mul(SCALE);
-        require(idSp.mint(_msgSender(), idSpAmount), MINT_ERROR);
+        require(idSp.mint(_msgSender(), allowance), MINT_ERROR);
 
         emit SponsorshipsWrapped(_msgSender(), allowance);
         return true;
     }
 
     /**
-     *@notice wrap subs to idSubs.
+     *@notice wrap idSp to sp
      *@dev A function that burns idSp and gives back sp
      */
     function unWrapSp()
@@ -76,24 +75,21 @@ contract Wrapper is Ownable {
         returns (bool success)
     {
         uint256 allowance = idSp.allowance(_msgSender(), address(this));
-        uint256 spAmount = allowance.div(SCALE);
-        require(spAmount > 0, INSUFFICIENT_ALLOWANCE);
-
         uint256 balance = sp.balanceOf(address(this));
-        if (balance < spAmount) {
-            spAmount = balance;
+        if (balance < allowance) {
+            allowance = balance;
         }
 
-        idSp.burnFrom(_msgSender(), spAmount.mul(SCALE));
-        require(sp.transfer(_msgSender(), spAmount), TRANSFER_ERROR);
+        idSp.burnFrom(_msgSender(), allowance);
+        require(sp.transfer(_msgSender(), allowance), TRANSFER_ERROR);
 
-        emit SponsorshipsUnWrapped(_msgSender(), spAmount);
+        emit SponsorshipsUnWrapped(_msgSender(), allowance);
         return true;
     }
 
     /**
-     *@notice wrap idSp to sp.
-     *@dev A function that gets subs and mints IdSubs.
+     *@notice wrap subs to idSubs
+     *@dev A function that gets subs and mints idSubs
      */
     function wrapSubs()
         external
@@ -110,7 +106,7 @@ contract Wrapper is Ownable {
     }
 
     /**
-     *@notice wrap idSubs to subs.
+     *@notice wrap idSubs to subs
      *@dev A function that burns idSubs and gives back subs
      */
     function unWrapSubs()
@@ -135,7 +131,7 @@ contract Wrapper is Ownable {
 
     /**
      *@dev withdrawal all funds to another account if needed
-    * @param account Destination account address.
+    * @param account Destination account address
      */
     function withdrawAll(address account)
         public

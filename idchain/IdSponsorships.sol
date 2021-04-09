@@ -33,6 +33,7 @@ contract IdSponsorships is ERC20, ERC20Burnable, AccessControl {
     constructor()
         ERC20("IdSponsorships", "IdSp")
     {
+        _setupDecimals(0);
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 

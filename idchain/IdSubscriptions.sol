@@ -117,7 +117,7 @@ contract IdSubscriptions is ERC20, ERC20Burnable, AccessControl {
         for (uint8 i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             // The number of IdSubscriptions purchased in the batch that matches the timestamp.
-            uint256 subsInBatch = accounts[account].batches[timestamp];
+            uint256 subsInBatch = accounts[account].batches[timestamp] / 10**18;
             // "months" is the number of whole 30-day periods since the batch was purchased (plus one).
             // We add one because we want each Subscription to start with one claimable sponsorship immediately.
             uint256 months = ((block.timestamp - timestamp) / (30*24*3600)) + 1;

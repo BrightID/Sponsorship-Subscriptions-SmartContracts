@@ -17,8 +17,6 @@ contract IdSponsorshipsMinter is FinanceManager {
 
     uint256 public minted;
 
-    uint256 TO_WEI = 10**18;
-
     IdSponsorships internal idSp;
     IdSubscriptions internal idSubs;
     ERC20 public purchaseToken;
@@ -91,8 +89,8 @@ contract IdSponsorshipsMinter is FinanceManager {
         require(purchaseToken.transferFrom(_msgSender(), address(this), purchaseTokenAmount), TRANSFER_FROM_ERROR);
 
         deposit(purchaseToken, purchaseTokenAmount, FINANCE_MESSAGE);
-        require(idSp.mint(_msgSender(), spAmount.mul(TO_WEI)), MINT_ERROR);
-        minted = minted.add(spAmount.mul(TO_WEI));
+        require(idSp.mint(_msgSender(), spAmount), MINT_ERROR);
+        minted = minted.add(spAmount);
 
         emit IdSponsorshipsPurchased(_msgSender(), spAmount, price);
         return true;
