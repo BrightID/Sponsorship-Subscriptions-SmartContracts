@@ -16,6 +16,8 @@ contract IdSubscriptions is ERC20, ERC20Burnable, AccessControl {
 
     uint256 public activated;
 
+    uint256 public constant SCALE = 1e18;
+
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     string private constant ALL_SPONSORSHIPS_CLAIMED = "All Sponsorships claimed";
@@ -69,12 +71,16 @@ contract IdSubscriptions is ERC20, ERC20Burnable, AccessControl {
         onlyPositive(amount)
         returns (bool)
     {
+        uint256 intPart = amount.div(SCALE);
+        require(intPart > 0, INVALID_AMOUNT);
+
+        uint256 subsAmount = intPart.mul(SCALE);
         uint256 timestamp = block.timestamp;
-        _burn(_msgSender(), amount);
-        activated = activated.add(amount);
+        _burn(_msgSender(), subsAmount);
+        activated = activated.add(subsAmount);
         accounts[_msgSender()].timestamps.push(timestamp);
-        accounts[_msgSender()].batches[timestamp] = amount;
-        emit IdSubscriptionsActivated(_msgSender(), amount);
+        accounts[_msgSender()].batches[timestamp] = subsAmount;
+        emit IdSubscriptionsActivated(_msgSender(), subsAmount);
         return true;
     }
 
@@ -117,7 +123,7 @@ contract IdSubscriptions is ERC20, ERC20Burnable, AccessControl {
         for (uint8 i = 0; i < accounts[account].timestamps.length; i++) {
             uint256 timestamp = accounts[account].timestamps[i];
             // The number of IdSubscriptions purchased in the batch that matches the timestamp.
-            uint256 subsInBatch = accounts[account].batches[timestamp] / 10**18;
+            uint256 subsInBatch = accounts[account].batches[timestamp].div(SCALE);
             // "months" is the number of whole 30-day periods since the batch was purchased (plus one).
             // We add one because we want each Subscription to start with one claimable sponsorship immediately.
             uint256 months = ((block.timestamp - timestamp) / (30*24*3600)) + 1;
